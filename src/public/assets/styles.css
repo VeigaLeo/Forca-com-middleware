@@ -1,0 +1,36 @@
+#alphabet li {
+  font-size: 28px;
+  float: left;
+  margin: 0 10px 10px 20px;
+  list-style: none;
+  width: 35px;
+  height: 30px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  cursor: pointer;
+  text-align: center;
+  border: 1px solid black;
+}
+
+#word li {
+  font-size: 28px;
+  float: left;
+  margin: 20% 10px 10px 20px;
+  list-style: none;
+  width: 35px;
+  height: 30px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.title {
+  text-align: center;
+  margin-bottom: 10%;
+}
+
+.category {
+  text-align: center;
+  margin-top: 50%;
+}

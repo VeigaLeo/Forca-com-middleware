@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Jogo da Forca</title>
+
+    <link rel="stylesheet" href="public/assets/styles.css" />
+    <script type="text/javascript" src="controller/hangman.js"></script>
+  </head>
+  <body onload="initGame()">
+    <center class="title">
+      <h1>Jogo da Forca</h1>
+    </center>
+    <div id="options" onclick="getLetter(event)"></div>
+    <div id="word"></div>
+    <center class="category">
+      <h1>
+        Categoria:
+        <script>
+          setCategory();
+        </script>
+      </h1>
+    </center>
+  </body>
+</html>
