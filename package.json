@@ -2,11 +2,9 @@
   "name": "Forca-com-middleware",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "type": "module",
+  "main": "main.js",
   "scripts": {
-    "dev": "nodemon ./server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "electron ."
   },
   "repository": {
     "type": "git",
@@ -22,5 +20,8 @@
   "dependencies": {
     "ejs": "^3.1.3",
     "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "electron": "^9.0.4"
   }
 }
