@@ -68,15 +68,17 @@ function handleGuess(chosenLetter) {
   guessed.indexOf(chosenLetter) === -1 ? guessed.push(chosenLetter) : null;
   document.getElementById(chosenLetter).setAttribute("disabled", true);
 
-  if (answer.indexOf(chosenLetter) >= 0) {
-    guessedWord();
-    checkIfGameWon();
-  } else if (answer.indexOf(chosenLetter) === -1) {
-    mistakes++;
-    updateMistakes();
-    checkIfGameLost();
-    updateHangmanPicture();
-  }
+  answer.forEach(element => {
+    if (element.indexOf(chosenLetter) >= 0) {
+      guessedWord();
+      checkIfGameWon();
+    } else if (element.indexOf(chosenLetter) === -1) {
+      // mistakes++;
+      // updateMistakes();
+      // checkIfGameLost();
+      // updateHangmanPicture();
+    }
+  });
 }
 
 function updateHangmanPicture() {
@@ -99,15 +101,18 @@ function checkIfGameLost() {
 
 function guessedWord() {
   answer.forEach(element => {
-    wordStatus.push(
+    wordStatus = [
+      ...wordStatus,
       element
         .split("")
-        .map(letter => (guessed.indexOf(letter) >= 0 ? letter : " _ "))
+        .map(letter => (guessed.indexOf(letter) > -0 ? letter : " _ "))
         .join("")
-    );
+    ];
   });
 
-  document.getElementById("wordSpotlight").innerHTML = wordStatus;
+  document.getElementById("wordSpotlight").innerHTML = wordStatus.slice(
+    wordStatus.length - 3
+  );
 }
 
 function updateMistakes() {
@@ -130,3 +135,4 @@ document.getElementById("maxWrong").innerHTML = maxWrong;
 randomWord();
 generateButtons();
 guessedWord();
+handleGuess("2");
