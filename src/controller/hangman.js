@@ -15,19 +15,29 @@ var programming_languages = [
   "ruby"
 ];
 
-let answer = "";
+let answer = [];
 let maxWrong = 6;
 let mistakes = 0;
 let guessed = [];
-let wordStatus = null;
+let wordStatus = [];
 
+/**
+ * generate 3 random words when game start
+ */
 function randomWord() {
-  answer =
-    programming_languages[
-      Math.floor(Math.random() * programming_languages.length)
-    ];
+  for (let i = 0; i < 3; i++) {
+    answer.push(
+      programming_languages[
+        Math.floor(Math.random() * programming_languages.length)
+      ]
+    );
+  }
+  console.log(answer);
 }
 
+/**
+ * Render the alphabet on the screen
+ */
 function generateButtons() {
   let buttonsHTML = "abcdefghijklmnopqrstuvwxyz"
     .split("")
@@ -88,10 +98,14 @@ function checkIfGameLost() {
 }
 
 function guessedWord() {
-  wordStatus = answer
-    .split("")
-    .map(letter => (guessed.indexOf(letter) >= 0 ? letter : " _ "))
-    .join("");
+  answer.forEach(element => {
+    wordStatus.push(
+      element
+        .split("")
+        .map(letter => (guessed.indexOf(letter) >= 0 ? letter : " _ "))
+        .join("")
+    );
+  });
 
   document.getElementById("wordSpotlight").innerHTML = wordStatus;
 }
