@@ -1,25 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Jogo da Forca</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
-    <link rel="stylesheet" href="public/assets/styles.css" />
-    <script type="text/javascript" src="controller/hangman.js"></script>
+    <!-- Bootstrap 4 CDN -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    />
+
+    <title>Hangman</title>
   </head>
-  <body onload="initGame()">
-    <center class="title">
-      <h1>Jogo da Forca</h1>
-    </center>
-    <div id="options" onclick="getLetter(event)"></div>
-    <div id="word"></div>
-    <center class="category">
-      <h1>
-        Categoria:
-        <script>
-          setCategory();
-        </script>
-      </h1>
-    </center>
+  <body>
+    <div class="container">
+      <h1 class="text-center">Hangman</h1>
+      <div class="float-right">
+        Wrong Guesses: <span id="mistakes">0</span> of
+        <span id="maxWrong"></span>
+      </div>
+      <div class="text-center">
+        <img id="hangmanPic" src="./images/0.jpg" alt="" />
+        <p>Guess the Programming Language:</p>
+        <p id="wordSpotlight">The word to be guessed goes here</p>
+        <div id="keyboard"></div>
+        <button class="btn btn-info" onClick="reset()">Reset</button>
+      </div>
+    </div>
+
+    <script src="../controller/hangman.js"></script>
   </body>
 </html>

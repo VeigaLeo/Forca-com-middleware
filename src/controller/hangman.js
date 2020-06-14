@@ -1,102 +1,118 @@
-const alphabet = [
-  "a",
-  "b",
+var programming_languages = [
+  "python",
+  "javascript",
+  "mongodb",
+  "json",
+  "java",
+  "html",
+  "css",
   "c",
-  "d",
-  "e",
-  "f",
-  "g",
-  "h",
-  "i",
-  "j",
-  "k",
-  "l",
-  "m",
-  "n",
-  "o",
-  "p",
-  "q",
-  "r",
-  "s",
-  "t",
-  "u",
-  "v",
-  "w",
-  "x",
-  "y",
-  "z"
+  "csharp",
+  "golang",
+  "kotlin",
+  "php",
+  "sql",
+  "ruby"
 ];
 
-const categories = ["comida", "objeto", "cidade"];
-const cities = ["londrina", "maringa"];
+let answer = "";
+let maxWrong = 6;
+let mistakes = 0;
+let guessed = [];
+let wordStatus = null;
 
-/**
- * Main function to start the game
- */
-function initGame() {
-  options();
-  word();
+function randomWord() {
+  answer =
+    programming_languages[
+      Math.floor(Math.random() * programming_languages.length)
+    ];
 }
 
-/**
- * render the alphabet on the screen
- */
-function options() {
-  options = document.getElementById("options");
-  letters = document.createElement("ul");
+function generateButtons() {
+  let buttonsHTML = "abcdefghijklmnopqrstuvwxyz"
+    .split("")
+    .map(
+      letter =>
+        `
+      <button
+        class="btn btn-lg btn-primary m-2"
+        id='` +
+        letter +
+        `'
+        onClick="handleGuess('` +
+        letter +
+        `')"
+      >
+        ` +
+        letter +
+        `
+      </button>
+    `
+    )
+    .join("");
 
-  for (var i = 0; i < alphabet.length; i++) {
-    letters.id = "alphabet";
-    list = document.createElement("li");
-    list.id = "letter";
-    list.innerHTML = alphabet[i];
-    options.appendChild(letters);
-    letters.appendChild(list);
+  document.getElementById("keyboard").innerHTML = buttonsHTML;
+}
+
+function handleGuess(chosenLetter) {
+  guessed.indexOf(chosenLetter) === -1 ? guessed.push(chosenLetter) : null;
+  document.getElementById(chosenLetter).setAttribute("disabled", true);
+
+  if (answer.indexOf(chosenLetter) >= 0) {
+    guessedWord();
+    checkIfGameWon();
+  } else if (answer.indexOf(chosenLetter) === -1) {
+    mistakes++;
+    updateMistakes();
+    checkIfGameLost();
+    updateHangmanPicture();
   }
 }
 
-/**
- * render the word to guess on the screen
- */
-function word() {
-  word = document.getElementById("word");
-  wordLetter = document.createElement("ul");
+function updateHangmanPicture() {
+  document.getElementById("hangmanPic").src = "./images/" + mistakes + ".jpg";
+}
 
-  randomCity = cities[Math.floor(Math.random() * cities.length)];
-  for (var i = 0; i < randomCity.length; i++) {
-    wordLetter.id = "word";
-    list = document.createElement("li");
-    list.id = "wordLetter";
-    //list.innerHTML = randomCity[i]; // display the full word
-    list.innerHTML = ["_"]; // display the "hidden" word
-    word.appendChild(wordLetter);
-    wordLetter.appendChild(list);
+function checkIfGameWon() {
+  if (wordStatus === answer) {
+    document.getElementById("keyboard").innerHTML = "You Won!!!";
   }
 }
 
-/**
- * set a random category
- */
-function setCategory() {
-  const item = categories[Math.floor(Math.random() * categories.length)];
-  document.write(item);
-  return item;
+function checkIfGameLost() {
+  if (mistakes === maxWrong) {
+    document.getElementById("wordSpotlight").innerHTML =
+      "The answer was: " + answer;
+    document.getElementById("keyboard").innerHTML = "You Lost!!!";
+  }
 }
 
-/**
- * Set a random word to guess based on the category
- */
-function setWord() {
-  //TODO: generate random word from cities array
-  //TODO: the generated word must be in the category above
+function guessedWord() {
+  wordStatus = answer
+    .split("")
+    .map(letter => (guessed.indexOf(letter) >= 0 ? letter : " _ "))
+    .join("");
+
+  document.getElementById("wordSpotlight").innerHTML = wordStatus;
 }
 
-/**
- * Get the word that the user has clicked
- * @param {object} MouseEvent
- */
-function getLetter(event) {
-  //TODO: compare if the letter exists in the word and render it on the screen
-  //TODO: disabled button if the user has already clicked once
-  console.log(event.target.innerText);
+function updateMistakes() {
+  document.getElementById("mistakes").innerHTML = mistakes;
 }
+
+function reset() {
+  mistakes = 0;
+  guessed = [];
+  document.getElementById("hangmanPic").src = "./images/0.jpg";
+
+  randomWord();
+  guessedWord();
+  updateMistakes();
+  generateButtons();
+}
+
+document.getElementById("maxWrong").innerHTML = maxWrong;
+
+randomWord();
+generateButtons();
+guessedWord();
