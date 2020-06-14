@@ -2,4 +2,4 @@
 
 # Instalação
 * execute `npm install` para instalar todas as dependências;
-* `npm run dev` para executar o projeto.
+* `npm start` para executar o projeto.
