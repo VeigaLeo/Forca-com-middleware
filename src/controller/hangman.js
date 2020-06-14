@@ -49,7 +49,7 @@ function generateButtons() {
         id='` +
         letter +
         `'
-        onClick="handleGuess('` +
+        onClick="handleUserChoice('` +
         letter +
         `')"
       >
@@ -64,48 +64,30 @@ function generateButtons() {
   document.getElementById("keyboard").innerHTML = buttonsHTML;
 }
 
-function handleGuess(chosenLetter) {
+/**
+ * Handle the letter that the user has chosen
+ * @param {string} chosenLetter the letter of the alphabet that the user has choose
+ */
+function handleUserChoice(chosenLetter) {
   guessed.indexOf(chosenLetter) === -1 ? guessed.push(chosenLetter) : null;
   document.getElementById(chosenLetter).setAttribute("disabled", true);
 
   answer.forEach(element => {
     if (element.indexOf(chosenLetter) >= 0) {
-      guessedWord();
-      checkIfGameWon();
+      wordChoose();
+      winConditional();
     } else if (element.indexOf(chosenLetter) === -1) {
       // mistakes++;
       // updateMistakes();
       // checkIfGameLost();
-      // updateHangmanPicture();
     }
   });
 }
 
-function updateHangmanPicture() {
-  document.getElementById("hangmanPic").src = "./images/" + mistakes + ".jpg";
-}
-
-function compare(arr1, arr2) {
-  if (!arr1 || !arr2) return;
-
-  let result;
-
-  arr1.forEach((e1, i) =>
-    arr2.forEach(e2 => {
-      if (e1.length > 1 && e2.length) {
-        result = compare(e1, e2);
-      } else if (e1 !== e2) {
-        result = false;
-      } else {
-        result = true;
-      }
-    })
-  );
-
-  return result;
-}
-
-function checkIfGameWon() {
+/**
+ * Win conditional
+ */
+function winConditional() {
   let answerArray = answer.toString();
   let answerStatusArray = wordStatus.slice(-3).toString();
 
@@ -114,6 +96,9 @@ function checkIfGameWon() {
   }
 }
 
+/**
+ * TODO
+ */
 function checkIfGameLost() {
   if (mistakes === maxWrong) {
     document.getElementById("wordSpotlight").innerHTML =
@@ -122,7 +107,10 @@ function checkIfGameLost() {
   }
 }
 
-function guessedWord() {
+/**
+ * verify if the word the that user has choose exists in the answer array
+ */
+function wordChoose() {
   answer.forEach(element => {
     wordStatus = [
       ...wordStatus,
@@ -138,24 +126,16 @@ function guessedWord() {
   );
 }
 
+/**
+ * Are we gonna use this?
+ */
 function updateMistakes() {
   document.getElementById("mistakes").innerHTML = mistakes;
-}
-
-function reset() {
-  mistakes = 0;
-  guessed = [];
-  document.getElementById("hangmanPic").src = "./images/0.jpg";
-
-  randomWord();
-  guessedWord();
-  updateMistakes();
-  generateButtons();
 }
 
 document.getElementById("maxWrong").innerHTML = maxWrong;
 
 randomWord();
 generateButtons();
-guessedWord();
-handleGuess("2");
+wordChoose();
+handleUserChoice("2");
