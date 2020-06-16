@@ -69,16 +69,18 @@ function generateButtons() {
  * @param {string} chosenLetter the letter of the alphabet that the user has choose
  */
 function handleUserChoice(chosenLetter) {
+  if (guessed.indexOf(chosenLetter) === -1) {
+    console.log("error?");
+  }
   guessed.indexOf(chosenLetter) === -1 ? guessed.push(chosenLetter) : null;
   document.getElementById(chosenLetter).setAttribute("disabled", true);
-
   answer.forEach(element => {
     if (element.indexOf(chosenLetter) >= 0) {
       wordChoose();
       winConditional();
     } else if (element.indexOf(chosenLetter) === -1) {
-      // mistakes++;
-      // updateMistakes();
+      console.log("não existe");
+
       // checkIfGameLost();
     }
   });
@@ -129,9 +131,21 @@ function wordChoose() {
 /**
  * Are we gonna use this?
  */
-function updateMistakes() {
-  document.getElementById("mistakes").innerHTML = mistakes;
+function updateMistakes(teste) {
+  let t = 0;
+  if (teste) {
+    console.log(t);
+    mistakes++;
+    console.log(mistakes);
+  }
+
+  // document.getElementById("mistakes").innerHTML = mistakes;
 }
+
+/**
+ *  TODO: implement the player and score logic
+ */
+function updatePlayerAndScore() {}
 
 document.getElementById("maxWrong").innerHTML = maxWrong;
 
