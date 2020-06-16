@@ -69,9 +69,6 @@ function generateButtons() {
  * @param {string} chosenLetter the letter of the alphabet that the user has choose
  */
 function handleUserChoice(chosenLetter) {
-  if (guessed.indexOf(chosenLetter) === -1) {
-    console.log("error?");
-  }
   guessed.indexOf(chosenLetter) === -1 ? guessed.push(chosenLetter) : null;
   document.getElementById(chosenLetter).setAttribute("disabled", true);
   answer.forEach(element => {
@@ -79,8 +76,6 @@ function handleUserChoice(chosenLetter) {
       wordChoose();
       winConditional();
     } else if (element.indexOf(chosenLetter) === -1) {
-      console.log("não existe");
-
       // checkIfGameLost();
     }
   });
@@ -126,20 +121,6 @@ function wordChoose() {
   document.getElementById("wordSpotlight").innerHTML = wordStatus.slice(
     wordStatus.length - 3
   );
-}
-
-/**
- * Are we gonna use this?
- */
-function updateMistakes(teste) {
-  let t = 0;
-  if (teste) {
-    console.log(t);
-    mistakes++;
-    console.log(mistakes);
-  }
-
-  // document.getElementById("mistakes").innerHTML = mistakes;
 }
 
 /**
