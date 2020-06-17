@@ -22,9 +22,19 @@ let guessed = [];
 let wordStatus = [];
 
 /**
+ * Main function that executes the game
+ */
+const initGame = () => {
+  randomWord();
+  generateButtons();
+  wordChoose();
+  handleUserChoice("2");
+};
+
+/**
  * generate 3 random words when game start
  */
-function randomWord() {
+const randomWord = () => {
   for (let i = 0; i < 3; i++) {
     answer.push(
       programming_languages[
@@ -33,12 +43,12 @@ function randomWord() {
     );
   }
   console.log(answer);
-}
+};
 
 /**
  * Render the alphabet on the screen
  */
-function generateButtons() {
+const generateButtons = () => {
   let buttonsHTML = "abcdefghijklmnopqrstuvwxyz"
     .split("")
     .map(
@@ -62,13 +72,13 @@ function generateButtons() {
     .join("");
 
   document.getElementById("keyboard").innerHTML = buttonsHTML;
-}
+};
 
 /**
  * Handle the letter that the user has chosen
  * @param {string} chosenLetter the letter of the alphabet that the user has choose
  */
-function handleUserChoice(chosenLetter) {
+const handleUserChoice = chosenLetter => {
   guessed.indexOf(chosenLetter) === -1 ? guessed.push(chosenLetter) : null;
   document.getElementById(chosenLetter).setAttribute("disabled", true);
   answer.forEach(element => {
@@ -79,35 +89,35 @@ function handleUserChoice(chosenLetter) {
       // checkIfGameLost();
     }
   });
-}
+};
 
 /**
  * Win conditional
  */
-function winConditional() {
+const winConditional = () => {
   let answerArray = answer.toString();
   let answerStatusArray = wordStatus.slice(-3).toString();
 
   if (answerArray === answerStatusArray) {
     document.getElementById("keyboard").innerHTML = "You Won!!!";
   }
-}
+};
 
 /**
  * TODO
  */
-function checkIfGameLost() {
+const checkIfGameLost = () => {
   if (mistakes === maxWrong) {
     document.getElementById("wordSpotlight").innerHTML =
       "The answer was: " + answer;
     document.getElementById("keyboard").innerHTML = "You Lost!!!";
   }
-}
+};
 
 /**
  * verify if the word the that user has choose exists in the answer array
  */
-function wordChoose() {
+const wordChoose = () => {
   answer.forEach(element => {
     wordStatus = [
       ...wordStatus,
@@ -121,16 +131,11 @@ function wordChoose() {
   document.getElementById("wordSpotlight").innerHTML = wordStatus.slice(
     wordStatus.length - 3
   );
-}
+};
 
 /**
  *  TODO: implement the player and score logic
  */
-function updatePlayerAndScore() {}
+const updatePlayerAndScore = () => {};
 
-document.getElementById("maxWrong").innerHTML = maxWrong;
-
-randomWord();
-generateButtons();
-wordChoose();
-handleUserChoice("2");
+// document.getElementById("maxWrong").innerHTML = maxWrong;
