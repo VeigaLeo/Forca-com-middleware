@@ -11,27 +11,21 @@
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     />
 
-    <title>Hangman</title>
+    <title>Forca com Middleware</title>
   </head>
   <body onload="initGame()">
     <div class="container">
-      <h1 class="text-center">Hangman</h1>
-      <div class="float-right">
-        Wrong Guesses: <span id="mistakes">0</span> of
-        <span id="maxWrong"></span>
-      </div>
+      <h1 class="text-center">Forca com Middleware</h1>
       <div class="text-center">
-        <img id="hangmanPic" src="./images/0.jpg" alt="" />
-        <p>Guess the Programming Language:</p>
-        <p id="wordSpotlight">The word to be guessed goes here</p>
+        <p>Para jogar, clique em alguma letra disponível.</p>
+        <p id="wordSpotlight"></p>
         <div id="keyboard"></div>
       </div>
 
-      <div class="text-center">
-        <span>
-          <!-- TODO: implement the player and score logic -->
-          Vez de Jogador: 1 - 5000 pontos
-        </span>
+      <div class="text-center" id="player">
+        <script>
+          handlePlayerTurn();
+        </script>
       </div>
     </div>
 

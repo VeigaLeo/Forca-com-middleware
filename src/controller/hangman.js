@@ -16,23 +16,33 @@ var programming_languages = [
 ];
 
 let answer = [];
-let maxWrong = 6;
-let mistakes = 0;
 let guessed = [];
 let wordStatus = [];
+let player = {
+  id: 1,
+  score: 0
+};
 
 /**
  * Main function that executes the game
  */
 const initGame = () => {
+  handlePlayerTurn();
   randomWord();
   generateButtons();
   wordChoose();
   handleUserChoice("2");
 };
 
+const handlePlayerTurn = () => {
+  let playerTurn =
+    "Vez de jogador: " + player.id + " - " + player.score + " pontos";
+
+  document.getElementById("player").innerHTML = playerTurn;
+};
+
 /**
- * generate 3 random words when game start
+ * Generate 3 random words when game start
  */
 const randomWord = () => {
   for (let i = 0; i < 3; i++) {
@@ -83,10 +93,22 @@ const handleUserChoice = chosenLetter => {
   document.getElementById(chosenLetter).setAttribute("disabled", true);
   answer.forEach(element => {
     if (element.indexOf(chosenLetter) >= 0) {
+      player = {
+        id: player.id,
+        score: player.score + 500
+      };
+      handlePlayerTurn();
+
       wordChoose();
       winConditional();
     } else if (element.indexOf(chosenLetter) === -1) {
-      // checkIfGameLost();
+      // if (player.id === 1) {
+      //   updatePlayerAndScore(2);
+      // } else if (player.id === 2) {
+      //   updatePlayerAndScore(3);
+      // } else if (player.id === 3) {
+      //   updatePlayerAndScore(1);
+      // }
     }
   });
 };
@@ -99,23 +121,20 @@ const winConditional = () => {
   let answerStatusArray = wordStatus.slice(-3).toString();
 
   if (answerArray === answerStatusArray) {
-    document.getElementById("keyboard").innerHTML = "You Won!!!";
+    let playerWon =
+      "Jogador " +
+      player.id +
+      " ganhou a partida com " +
+      player.score +
+      " pontos!";
+
+    document.getElementById("keyboard").innerHTML = playerWon;
+    document.getElementById("player").innerHTML = "";
   }
 };
 
 /**
- * TODO
- */
-const checkIfGameLost = () => {
-  if (mistakes === maxWrong) {
-    document.getElementById("wordSpotlight").innerHTML =
-      "The answer was: " + answer;
-    document.getElementById("keyboard").innerHTML = "You Lost!!!";
-  }
-};
-
-/**
- * verify if the word the that user has choose exists in the answer array
+ * Verify if the word the that user has choose exists in the answer array
  */
 const wordChoose = () => {
   answer.forEach(element => {
@@ -123,7 +142,7 @@ const wordChoose = () => {
       ...wordStatus,
       element
         .split("")
-        .map(letter => (guessed.indexOf(letter) > -0 ? letter : " _ "))
+        .map(letter => (guessed.indexOf(letter) > 0 ? letter : " _ "))
         .join("")
     ];
   });
@@ -133,9 +152,7 @@ const wordChoose = () => {
   );
 };
 
-/**
- *  TODO: implement the player and score logic
- */
-const updatePlayerAndScore = () => {};
-
-// document.getElementById("maxWrong").innerHTML = maxWrong;
+const updatePlayerAndScore = value => {
+  player.id = value;
+  handlePlayerTurn();
+};
