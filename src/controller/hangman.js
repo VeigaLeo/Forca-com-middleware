@@ -18,10 +18,21 @@ var programming_languages = [
 let answer = [];
 let guessed = [];
 let wordStatus = [];
-let player = {
+let maxPlayer = 2;
+let currentPlayer = 0; 
+let initialCharacter = 0;
+let players = [{
   id: 1,
   score: 0
-};
+},
+{
+  id: 2,
+  score: 0
+},
+{
+  id: 3,
+  score: 0
+}];
 
 /**
  * Main function that executes the game
@@ -36,7 +47,7 @@ const initGame = () => {
 
 const handlePlayerTurn = () => {
   let playerTurn =
-    "Vez de jogador: " + player.id + " - " + player.score + " pontos";
+    "Vez do jogador: " + players[currentPlayer].id + " - " + players[currentPlayer].score + " pontos";
 
   document.getElementById("player").innerHTML = playerTurn;
 };
@@ -89,29 +100,46 @@ const generateButtons = () => {
  * @param {string} chosenLetter the letter of the alphabet that the user has choose
  */
 const handleUserChoice = chosenLetter => {
+  let foundLetter = false;
+
   guessed.indexOf(chosenLetter) === -1 ? guessed.push(chosenLetter) : null;
   document.getElementById(chosenLetter).setAttribute("disabled", true);
   answer.forEach(element => {
     if (element.indexOf(chosenLetter) >= 0) {
-      player = {
-        id: player.id,
-        score: player.score + 500
-      };
+      players[currentPlayer].score = players[currentPlayer].score + 500;
+      
+      foundLetter = true;
       handlePlayerTurn();
-
       wordChoose();
       winConditional();
-    } else if (element.indexOf(chosenLetter) === -1) {
-      // if (player.id === 1) {
-      //   updatePlayerAndScore(2);
-      // } else if (player.id === 2) {
-      //   updatePlayerAndScore(3);
-      // } else if (player.id === 3) {
-      //   updatePlayerAndScore(1);
-      // }
+      updateScoreBoard();
     }
   });
+
+  if(!foundLetter){
+    nextPlayer();
+    handlePlayerTurn();
+    updateScoreBoard();
+  }
 };
+
+const nextPlayer = () => {
+  if(currentPlayer === maxPlayer){
+    currentPlayer = initialCharacter;
+  }else{
+    currentPlayer++;
+  }
+}
+
+const updateScoreBoard = () => {
+  let scoreBoard = players.sort(function(a,b) {
+    return a.score > b.score ? -1 : a.score < b.score ? 1 : 0;
+  });
+
+  document.getElementById('numberOnePlayerScore').innerText = 'Posição 1 - Jogador: ' + scoreBoard[0].id + " - " + scoreBoard[0].score;
+  document.getElementById('numberTwoPlayerScore').innerText = 'Posição 2 - Jogador: ' + scoreBoard[1].id + " - " + scoreBoard[1].score;
+  document.getElementById('numberThreePlayerScore').innerText = 'Posição 3 - Jogador: ' + scoreBoard[2].id + " - " + scoreBoard[2].score;
+}
 
 /**
  * Win conditional
@@ -121,12 +149,10 @@ const winConditional = () => {
   let answerStatusArray = wordStatus.slice(-3).toString();
 
   if (answerArray === answerStatusArray) {
-    let playerWon =
-      "Jogador " +
-      player.id +
-      " ganhou a partida com " +
-      player.score +
-      " pontos!";
+    var maxScore = Math.max.apply(Math, players.map(function(obj){return obj.score;}));
+    var winnerPlayer = players.find(function(obj){ return obj.score == maxScore; })
+
+    let playerWon = "Jogador " + winnerPlayer.id + " ganhou a partida com " + winnerPlayer.score + " pontos";
 
     document.getElementById("keyboard").innerHTML = playerWon;
     document.getElementById("player").innerHTML = "";
@@ -151,8 +177,3 @@ const wordChoose = () => {
     wordStatus.length - 3
   );
 };
-
-// const updatePlayerAndScore = value => {
-//   player.id = value;
-//   handlePlayerTurn();
-// };
