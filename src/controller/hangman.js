@@ -152,7 +152,7 @@ const wordChoose = () => {
   );
 };
 
-const updatePlayerAndScore = value => {
-  player.id = value;
-  handlePlayerTurn();
-};
+// const updatePlayerAndScore = value => {
+//   player.id = value;
+//   handlePlayerTurn();
+// };
