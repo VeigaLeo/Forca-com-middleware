@@ -1,38 +1,25 @@
-var programming_languages = [
-  "python",
-  "javascript",
-  "mongodb",
-  "json",
-  "java",
-  "html",
-  "css",
-  "c",
-  "csharp",
-  "golang",
-  "kotlin",
-  "php",
-  "sql",
-  "ruby"
-];
+const words = require("../utils/words");
 
 let answer = [];
 let guessed = [];
 let wordStatus = [];
 let maxPlayer = 2;
-let currentPlayer = 0; 
+let currentPlayer = 0;
 let initialCharacter = 0;
-let players = [{
-  id: 1,
-  score: 0
-},
-{
-  id: 2,
-  score: 0
-},
-{
-  id: 3,
-  score: 0
-}];
+let players = [
+  {
+    id: 1,
+    score: 0
+  },
+  {
+    id: 2,
+    score: 0
+  },
+  {
+    id: 3,
+    score: 0
+  }
+];
 
 /**
  * Main function that executes the game
@@ -45,9 +32,16 @@ const initGame = () => {
   handleUserChoice("2");
 };
 
+/**
+ * handle which player is playing
+ */
 const handlePlayerTurn = () => {
-  let playerTurn =
-    "Vez do jogador: " + players[currentPlayer].id + " - " + players[currentPlayer].score + " pontos";
+  const playerTurn =
+    "Vez do jogador: " +
+    players[currentPlayer].id +
+    " - " +
+    players[currentPlayer].score +
+    " pontos";
 
   document.getElementById("player").innerHTML = playerTurn;
 };
@@ -57,11 +51,7 @@ const handlePlayerTurn = () => {
  */
 const randomWord = () => {
   for (let i = 0; i < 3; i++) {
-    answer.push(
-      programming_languages[
-        Math.floor(Math.random() * programming_languages.length)
-      ]
-    );
+    answer.push(words[Math.floor(Math.random() * words.length)]);
   }
   console.log(answer);
 };
@@ -70,13 +60,13 @@ const randomWord = () => {
  * Render the alphabet on the screen
  */
 const generateButtons = () => {
-  let buttonsHTML = "abcdefghijklmnopqrstuvwxyz"
+  const buttonsHTML = "abcdefghijklmnopqrstuvwxyz"
     .split("")
     .map(
       letter =>
         `
       <button
-        class="btn btn-lg btn-primary m-2"
+        class="button"
         id='` +
         letter +
         `'
@@ -107,7 +97,7 @@ const handleUserChoice = chosenLetter => {
   answer.forEach(element => {
     if (element.indexOf(chosenLetter) >= 0) {
       players[currentPlayer].score = players[currentPlayer].score + 500;
-      
+
       foundLetter = true;
       handlePlayerTurn();
       wordChoose();
@@ -116,51 +106,75 @@ const handleUserChoice = chosenLetter => {
     }
   });
 
-  if(!foundLetter){
+  if (!foundLetter) {
     nextPlayer();
     handlePlayerTurn();
     updateScoreBoard();
   }
 };
 
+/**
+ * Next player conditional
+ */
 const nextPlayer = () => {
-  if(currentPlayer === maxPlayer){
+  if (currentPlayer === maxPlayer) {
     currentPlayer = initialCharacter;
-  }else{
+  } else {
     currentPlayer++;
   }
-}
+};
 
+/**
+ * Update the score board
+ */
 const updateScoreBoard = () => {
-  let scoreBoard = players.sort(function(a,b) {
+  const scoreBoard = players.sort(function (a, b) {
     return a.score > b.score ? -1 : a.score < b.score ? 1 : 0;
   });
 
-  document.getElementById('numberOnePlayerScore').innerText = 'Posição 1 - Jogador: ' + scoreBoard[0].id + " - " + scoreBoard[0].score;
-  document.getElementById('numberTwoPlayerScore').innerText = 'Posição 2 - Jogador: ' + scoreBoard[1].id + " - " + scoreBoard[1].score;
-  document.getElementById('numberThreePlayerScore').innerText = 'Posição 3 - Jogador: ' + scoreBoard[2].id + " - " + scoreBoard[2].score;
-}
+  document.getElementById("numberOnePlayerScore").innerText =
+    "Posição 1 - Jogador: " + scoreBoard[0].id + " - " + scoreBoard[0].score;
+  document.getElementById("numberTwoPlayerScore").innerText =
+    "Posição 2 - Jogador: " + scoreBoard[1].id + " - " + scoreBoard[1].score;
+  document.getElementById("numberThreePlayerScore").innerText =
+    "Posição 3 - Jogador: " + scoreBoard[2].id + " - " + scoreBoard[2].score;
+};
 
 /**
  * Win conditional
  */
 const winConditional = () => {
-  let answerArray = answer.toString();
-  let answerStatusArray = wordStatus.slice(-3).toString();
+  const answerArray = answer.toString();
+  const answerStatusArray = wordStatus.slice(-3).toString();
 
   if (answerArray === answerStatusArray) {
-    var maxScore = Math.max.apply(Math, players.map(function(obj){return obj.score;}));
-    var winnerPlayer = players.find(function(obj){ return obj.score == maxScore; })
+    var maxScore = Math.max.apply(
+      Math,
+      players.map(function (obj) {
+        return obj.score;
+      })
+    );
+    var winnerPlayer = players.find(function (obj) {
+      return obj.score == maxScore;
+    });
 
-    let playerWon = "Jogador " + winnerPlayer.id + " ganhou a partida com " + winnerPlayer.score + " pontos";
+    const playerWon =
+      "Jogador " +
+      winnerPlayer.id +
+      " ganhou a partida com " +
+      winnerPlayer.score +
+      " pontos";
 
-    document.getElementById("keyboard").innerHTML = playerWon;
+    document.getElementById("playerWon").innerHTML = playerWon;
     document.getElementById("player").innerHTML = "";
+    document.getElementById("keyboard").innerHTML = "";
+    document.getElementById("instructions").innerHTML =
+      "As palavras sorteadas foram: ";
   }
 };
 
 /**
- * Verify if the word the that user has choose exists in the answer array
+ * Verify if the word that user has choose exists in the answer array
  */
 const wordChoose = () => {
   answer.forEach(element => {
@@ -173,7 +187,34 @@ const wordChoose = () => {
     ];
   });
 
-  document.getElementById("wordSpotlight").innerHTML = wordStatus.slice(
-    wordStatus.length - 3
-  );
+  const wordAnswerArray = wordStatus.slice(wordStatus.length - 3).slice(",");
+
+  document.getElementById("wordSpotlight").innerHTML =
+    `
+    <p
+      class="word"
+    >
+      ` +
+    wordAnswerArray[0] +
+    `
+    </p>
+    <p
+    class="word"
+    >
+      ` +
+    wordAnswerArray[1] +
+    `
+    </p>
+    <p
+    class="word"
+    >
+      ` +
+    wordAnswerArray[2] +
+    `
+    </p>
+  `;
+};
+
+module.exports = {
+  initGame
 };

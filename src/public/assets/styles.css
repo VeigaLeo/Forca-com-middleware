@@ -31,12 +31,21 @@ body {
   align-items: center;
 }
 
-.title {
-  text-align: center;
-  margin-bottom: 20px;
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  font-size: 25px;
+  width: 100%;
+  margin: 30px;
+}
+.playerWon {
+  display: flex;
+  justify-content: center;
+}
+.button {
+  text-transform: uppercase;
 }
 
-.category {
-  text-align: center;
-  margin-top: 20px;
+.word {
+  text-transform: uppercase;
 }

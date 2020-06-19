@@ -10,16 +10,17 @@
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     />
-
+    <link rel="stylesheet" href="../public/assets/styles.css" />
     <title>Forca com Middleware</title>
   </head>
   <body onload="initGame()">
     <div class="container">
       <h1 class="text-center">Forca com Middleware</h1>
       <div class="text-center">
-        <p>Para jogar, clique em alguma letra disponível.</p>
-        <p id="wordSpotlight"></p>
-        <div id="keyboard"></div>
+        <p id="instructions">Para jogar, clique em alguma letra disponível.</p>
+        <div id="wordSpotlight" class="wordStatus"></div>
+        <div id="keyboard" class="buttons"></div>
+        <div id="playerWon" class="playerWon"></div>
       </div>
 
       <div class="text-center" id="player">
@@ -30,9 +31,10 @@
     </div>
     <footer>
       <div id="playerScore" style="text-align: center;">
-        <br><span id="numberOnePlayerScore">Posição 1 - Jogador: 1 - 0</span><br>        
-        <span id="numberTwoPlayerScore">Posição 2 - Jogador: 2 - 0</span><br>      
-        <span id="numberThreePlayerScore">Posição 3 - Jogador: 3 - 0</span>        
+        <br /><span id="numberOnePlayerScore">Posição 1 - Jogador: 1 - 0</span
+        ><br />
+        <span id="numberTwoPlayerScore">Posição 2 - Jogador: 2 - 0</span><br />
+        <span id="numberThreePlayerScore">Posição 3 - Jogador: 3 - 0</span>
       </div>
     </footer>
 
