@@ -10,7 +10,7 @@
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     />
-    <link rel="stylesheet" href="../public/assets/styles.css" />
+    <link rel="stylesheet" href="css/styles.css" />
     <title>Forca com Middleware</title>
   </head>
   <body onload="initGame()">
@@ -19,7 +19,9 @@
       <div class="text-center">
         <p id="instructions">Para jogar, clique em alguma letra disponível.</p>
         <div id="wordSpotlight" class="wordStatus"></div>
-        <div id="keyboard" class="buttons"></div>
+        <form action="/api/guess" method="POST">
+          <div id="keyboard" class="buttons"></div>
+        </form>
         <div id="playerWon" class="playerWon"></div>
       </div>
 
@@ -38,6 +40,6 @@
       </div>
     </footer>
 
-    <script src="../controller/hangman.js"></script>
+    <script type="text/javascript" src="js/hangman.js"></script>
   </body>
 </html>

@@ -1,4 +1,102 @@
-const words = require("../utils/words");
+const words = [
+  "usar",
+  "reverter",
+  "deixei",
+  "interferir",
+  "orar",
+  "demora",
+  "beneficio",
+  "nomear",
+  "sobreviver",
+  "escavacao",
+  "caloroso",
+  "compensar",
+  "desfrutar",
+  "esmagar",
+  "escape",
+  "ilustrar",
+  "foca",
+  "derramar",
+  "acho",
+  "tiro",
+  "equipar",
+  "pop",
+  "informar",
+  "admitir",
+  "contemplar",
+  "impulso",
+  "mudanca",
+  "nome",
+  "desaparecer",
+  "iniciar",
+  "longo",
+  "sofrer",
+  "procriar",
+  "sujeito",
+  "tratar",
+  "hesitar",
+  "parte",
+  "formular",
+  "morrer",
+  "saltar",
+  "falta",
+  "entregar",
+  "tentativa",
+  "dar",
+  "empregar",
+  "debate",
+  "interpretar",
+  "permanecer",
+  "selecionar",
+  "ponto"
+];
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+global.document = new JSDOM(`<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <!-- Bootstrap 4 CDN -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="css/styles.css" />
+    <title>Forca com Middleware</title>
+  </head>
+  <body onload="initGame()">
+    <div class="container">
+      <h1 class="text-center">Forca com Middleware</h1>
+      <div class="text-center">
+        <p id="instructions">Para jogar, clique em alguma letra disponível.</p>
+        <div id="wordSpotlight" class="wordStatus"></div>
+        <form action="/api/guess" method="POST">
+          <div id="keyboard" class="buttons"></div>
+        </form>
+        <div id="playerWon" class="playerWon"></div>
+      </div>
+
+      <div class="text-center" id="player">
+        <script>
+          handlePlayerTurn();
+        </script>
+      </div>
+    </div>
+    <footer>
+      <div id="playerScore" style="text-align: center;">
+        <br /><span id="numberOnePlayerScore">Posição 1 - Jogador: 1 - 0</span
+        ><br />
+        <span id="numberTwoPlayerScore">Posição 2 - Jogador: 2 - 0</span><br />
+        <span id="numberThreePlayerScore">Posição 3 - Jogador: 3 - 0</span>
+      </div>
+    </footer>
+
+    <script type="text/javascript" src="js/hangman.js"></script>
+  </body>
+</html>`).window.document;
 
 let answer = [];
 let guessed = [];
@@ -21,6 +119,21 @@ let players = [
   }
 ];
 
+module.exports = function (app, config) {
+  randomWord();
+
+  app.route("/api/guess").post(function (req, res) {
+    if (!req.body) {
+      res.sendStatus(500);
+    } else {
+      res.send(req.body);
+      console.log(req.body);
+
+      handleUserChoice(req.body.letter);
+    }
+  });
+};
+
 /**
  * Main function that executes the game
  */
@@ -42,6 +155,8 @@ const handlePlayerTurn = () => {
     " - " +
     players[currentPlayer].score +
     " pontos";
+
+  console.log("playerTurn", playerTurn);
 
   document.getElementById("player").innerHTML = playerTurn;
 };
@@ -67,9 +182,13 @@ const generateButtons = () => {
         `
       <button
         class="button"
+        value="` +
+        letter +
+        `"
+        name="button"
         id='` +
         letter +
-        `'
+        `1'
         onClick="handleUserChoice('` +
         letter +
         `')"
@@ -93,7 +212,11 @@ const handleUserChoice = chosenLetter => {
   let foundLetter = false;
 
   guessed.indexOf(chosenLetter) === -1 ? guessed.push(chosenLetter) : null;
-  document.getElementById(chosenLetter).setAttribute("disabled", true);
+
+  // document.getElementById(chosenLetter).setAttribute("disabled", true);
+  console.log(answer);
+  console.log("Palavras usadas: ", guessed);
+
   answer.forEach(element => {
     if (element.indexOf(chosenLetter) >= 0) {
       players[currentPlayer].score = players[currentPlayer].score + 500;
@@ -131,6 +254,8 @@ const updateScoreBoard = () => {
   const scoreBoard = players.sort(function (a, b) {
     return a.score > b.score ? -1 : a.score < b.score ? 1 : 0;
   });
+
+  console.log("scoreBoard", scoreBoard);
 
   document.getElementById("numberOnePlayerScore").innerText =
     "Posição 1 - Jogador: " + scoreBoard[0].id + " - " + scoreBoard[0].score;
@@ -189,6 +314,8 @@ const wordChoose = () => {
 
   const wordAnswerArray = wordStatus.slice(wordStatus.length - 3).slice(",");
 
+  console.log("board: ", wordAnswerArray);
+
   document.getElementById("wordSpotlight").innerHTML =
     `
     <p
@@ -215,6 +342,6 @@ const wordChoose = () => {
   `;
 };
 
-module.exports = {
-  initGame
-};
+// module.exports = {
+//   initGame
+// };

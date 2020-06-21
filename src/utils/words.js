@@ -48,7 +48,7 @@ const words = [
   "interpretar",
   "permanecer",
   "selecionar",
-  "Ponto"
+  "ponto"
 ];
 
 module.exports = words;
