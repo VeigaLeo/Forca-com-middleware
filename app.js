@@ -12,7 +12,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/src/public/index.html");
 });
-require("./src/controller/hangman")(app);
+require("./src/routes/index")(app);
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 module.exports = app;

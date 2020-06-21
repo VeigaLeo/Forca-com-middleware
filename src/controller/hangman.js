@@ -50,53 +50,6 @@ const words = [
   "selecionar",
   "ponto"
 ];
-const jsdom = require("jsdom");
-const { JSDOM } = jsdom;
-global.document = new JSDOM(`<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-
-    <!-- Bootstrap 4 CDN -->
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-    />
-    <link rel="stylesheet" href="css/styles.css" />
-    <title>Forca com Middleware</title>
-  </head>
-  <body onload="initGame()">
-    <div class="container">
-      <h1 class="text-center">Forca com Middleware</h1>
-      <div class="text-center">
-        <p id="instructions">Para jogar, clique em alguma letra disponível.</p>
-        <div id="wordSpotlight" class="wordStatus"></div>
-        <form action="/api/guess" method="POST">
-          <div id="keyboard" class="buttons"></div>
-        </form>
-        <div id="playerWon" class="playerWon"></div>
-      </div>
-
-      <div class="text-center" id="player">
-        <script>
-          handlePlayerTurn();
-        </script>
-      </div>
-    </div>
-    <footer>
-      <div id="playerScore" style="text-align: center;">
-        <br /><span id="numberOnePlayerScore">Posição 1 - Jogador: 1 - 0</span
-        ><br />
-        <span id="numberTwoPlayerScore">Posição 2 - Jogador: 2 - 0</span><br />
-        <span id="numberThreePlayerScore">Posição 3 - Jogador: 3 - 0</span>
-      </div>
-    </footer>
-
-    <script type="text/javascript" src="js/hangman.js"></script>
-  </body>
-</html>`).window.document;
 
 let answer = [];
 let guessed = [];
@@ -118,21 +71,6 @@ let players = [
     score: 0
   }
 ];
-
-module.exports = function (app, config) {
-  randomWord();
-
-  app.route("/api/guess").post(function (req, res) {
-    if (!req.body) {
-      res.sendStatus(500);
-    } else {
-      res.send(req.body);
-      console.log(req.body);
-
-      handleUserChoice(req.body.letter);
-    }
-  });
-};
 
 /**
  * Main function that executes the game
@@ -342,6 +280,7 @@ const wordChoose = () => {
   `;
 };
 
-// module.exports = {
-//   initGame
-// };
+module.exports = {
+  initGame,
+  handleUserChoice
+};
