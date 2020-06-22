@@ -3,6 +3,8 @@ var http = require('http').createServer(express);
 var io = require('socket.io')(http);
 const { app, BrowserWindow } = require("electron");
 
+let players = [];
+
 function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
@@ -46,6 +48,7 @@ io.on('connection', (socket) => {
   const totalPlayers = socket.client.conn.server.clientsCount;
 
   if(totalPlayers <= 3){
+    players.concat({playerId: totalPlayers, socketId: socket.id, score: 0});
     socket.broadcast.emit('newplayer', { playerId: totalPlayers });
   }
 });

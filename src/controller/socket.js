@@ -9,7 +9,7 @@ socket.on('event', function(data){
 });
 
 socket.on('newplayer', function(data){
-    console.log(data);
+    toastr.success('Novo jogador!', 'Jogador ' + data.playerId + ' entrou na partida!');
 });
 
 socket.on('disconnect', function(){
