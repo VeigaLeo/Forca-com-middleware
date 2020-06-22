@@ -1,6 +1,6 @@
 var socket = io('http://localhost:5000');
 
-socket.on('connect', function(){
+socket.on('connect', function(socket){
     // toastr.success('Sucesso ao conectar ao jogo', 'Boa sorte!');
 });
 
@@ -25,9 +25,10 @@ socket.on('updatescoreboard', function(players){
 });
 
 socket.on('registerplayer', function(newPlayerId){
-    playerId = newPlayerId;
-
-    players.push({ playerId: playerId, socketId: socket.id, score: 0 });
+    if(playerId === null){
+        playerId = newPlayerId;
+        players.push({ playerId: playerId, socketId: socket.id, score: 0 });
+    }
 });
 
 socket.on('nextplayer', function(currentPlayerId){

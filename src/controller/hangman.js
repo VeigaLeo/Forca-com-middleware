@@ -1,11 +1,15 @@
 const words = require("../utils/words");
 
 let players = [];
-let playerId = 0;
+let playerId = null;
 let currentPlayer = 0;
 let answer = [];
 let guessed = [];
 let wordStatus = [];
+
+$(document).ready(() => {
+  initGame();
+});
 
 /**
  * Main function that executes the game
@@ -16,20 +20,27 @@ const initGame = () => {
   generateButtons();
   wordChoose();
   handleUserChoice("2");
+  printUserName();
+};
+
+const printUserName = () => {
+  $("#jogador").text("Jogador " + currentPlayer + 1);
 };
 
 /**
  * handle which player is playing
  */
 const handlePlayerTurn = () => {
-  const playerTurn =
-    "Vez do jogador: " +
-    players[currentPlayer].id +
-    " - " +
-    players[currentPlayer].score +
-    " pontos";
+  if (players.length !== 0) {
+    let playerTurn =
+      "Vez do jogador: " +
+      players[currentPlayer].id +
+      " - " +
+      players[currentPlayer].score +
+      " pontos";
 
-  document.getElementById("player").innerHTML = playerTurn;
+    document.getElementById("player").innerHTML = playerTurn;
+  }
 };
 
 /**
@@ -39,7 +50,6 @@ const randomWord = () => {
   for (let i = 0; i < 3; i++) {
     answer.push(words[Math.floor(Math.random() * words.length)]);
   }
-  console.log(answer);
 };
 
 /**
@@ -76,26 +86,30 @@ const generateButtons = () => {
  * @param {string} chosenLetter the letter of the alphabet that the user has choose
  */
 const handleUserChoice = chosenLetter => {
-  let foundLetter = false;
+  if (currentPlayer === playerId) {
+    let foundLetter = false;
 
-  guessed.indexOf(chosenLetter) === -1 ? guessed.push(chosenLetter) : null;
-  document.getElementById(chosenLetter).setAttribute("disabled", true);
-  answer.forEach(element => {
-    if (element.indexOf(chosenLetter) >= 0) {
-      players[currentPlayer].score = players[currentPlayer].score + 500;
+    guessed.indexOf(chosenLetter) === -1 ? guessed.push(chosenLetter) : null;
+    document.getElementById(chosenLetter).setAttribute("disabled", true);
+    answer.forEach(element => {
+      if (element.indexOf(chosenLetter) >= 0) {
+        players[currentPlayer].score = players[currentPlayer].score + 500;
 
-      foundLetter = true;
+        foundLetter = true;
+        handlePlayerTurn();
+        wordChoose();
+        winConditional();
+
+        socket.emit("foundletter", { socketId: socket.id });
+      }
+    });
+
+    if (!foundLetter) {
+      nextPlayer();
       handlePlayerTurn();
-      wordChoose();
-      winConditional();
-
-      socket.emit("foundletter", { socketId: socket.id });
     }
-  });
-
-  if (!foundLetter) {
-    nextPlayer();
-    handlePlayerTurn();
+  } else {
+    toastr.error("Aguarde sua vez");
   }
 };
 

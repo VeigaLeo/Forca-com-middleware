@@ -11,9 +11,15 @@
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     />
     <link rel="stylesheet" href="../public/assets/styles.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+      rel="stylesheet"
+      media="all"
+    />
+
     <title>Forca com Middleware</title>
   </head>
-  <body onload="initGame()">
+  <body>
     <div class="container">
       <h1 class="text-center">Forca com Middleware</h1>
       <div class="text-center">
@@ -33,10 +39,17 @@
       <div id="playerScore" style="text-align: center;">
         <br /><span id="numberOnePlayerScore"></span><br />
         <span id="numberTwoPlayerScore"></span><br />
-        <span id="numberThreePlayerScore"></span>
+        <span id="numberThreePlayerScore"></span><br /><br />
+        <span id="jogador" style="color: red;"></span>
       </div>
     </footer>
 
+    <script>
+      window.$ = window.jQuery = require("jquery");
+    </script>
+    <script>
+      window.toastr = require("toastr");
+    </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="../../node_modules/socket.io-client/dist/socket.io.js"></script>
     <script src="../controller/socket.js"></script>
