@@ -4,6 +4,9 @@ var io = require('socket.io')(http);
 const { app, BrowserWindow } = require("electron");
 
 let players = [];
+let maxPlayer = 2;
+let currentPlayer = 0;
+let totalPlayersPlaying = 0;
 
 function createWindow() {
   // Create the browser window.
@@ -45,12 +48,36 @@ app.on("activate", () => {
 });
 
 io.on('connection', (socket) => {
-  const totalPlayers = socket.client.conn.server.clientsCount;
-
   if(totalPlayers <= 3){
-    players.concat({playerId: totalPlayers, socketId: socket.id, score: 0});
-    socket.broadcast.emit('newplayer', { playerId: totalPlayers });
+    players.push({playerId: currentPlayer, socketId: socket.id, score: 0});
+    socket.broadcast.emit('registerplayer', { playerId: totalPlayers });
+
+    if(totalPlayers < 3){
+      totalPlayersPlaying += 1;
+    }
   }
+
+  socket.on('foundletter', (socket) =>{
+    const socketPlayerId = socket.socketId;
+  
+    for(let i=0; i<players.length; i++){
+      if(players[i].socketId === socketPlayerId){
+        players[i].score =+ 500;
+      }
+    } 
+
+    io.sockets.emit('updatescoreboard', players);
+  });
+
+  socket.on('nextplayer', (socket) => {
+    if(currentPlayer === maxPlayer){
+      currentPlayer = 0;
+      io.sockets.emit('nextplayer', currentPlayer);
+    }else{
+      currentPlayer =+ 1;
+      io.sockets.emit('nextplayer', currentPlayer);
+    }
+  });
 });
 
 http.listen(5000, () => {

@@ -1,25 +1,11 @@
 const words = require("../utils/words");
 
+let players = [];
+let playerId = 0;
+let currentPlayer = 0;
 let answer = [];
 let guessed = [];
 let wordStatus = [];
-let maxPlayer = 2;
-let currentPlayer = 0;
-let initialCharacter = 0;
-let players = [
-  {
-    id: 1,
-    score: 0
-  },
-  {
-    id: 2,
-    score: 0
-  },
-  {
-    id: 3,
-    score: 0
-  }
-];
 
 /**
  * Main function that executes the game
@@ -102,14 +88,14 @@ const handleUserChoice = chosenLetter => {
       handlePlayerTurn();
       wordChoose();
       winConditional();
-      updateScoreBoard();
+
+      socket.emit("foundletter", { socketId: socket.id });
     }
   });
 
   if (!foundLetter) {
     nextPlayer();
     handlePlayerTurn();
-    updateScoreBoard();
   }
 };
 
@@ -117,27 +103,7 @@ const handleUserChoice = chosenLetter => {
  * Next player conditional
  */
 const nextPlayer = () => {
-  if (currentPlayer === maxPlayer) {
-    currentPlayer = initialCharacter;
-  } else {
-    currentPlayer++;
-  }
-};
-
-/**
- * Update the score board
- */
-const updateScoreBoard = () => {
-  const scoreBoard = players.sort(function (a, b) {
-    return a.score > b.score ? -1 : a.score < b.score ? 1 : 0;
-  });
-
-  document.getElementById("numberOnePlayerScore").innerText =
-    "Posição 1 - Jogador: " + scoreBoard[0].id + " - " + scoreBoard[0].score;
-  document.getElementById("numberTwoPlayerScore").innerText =
-    "Posição 2 - Jogador: " + scoreBoard[1].id + " - " + scoreBoard[1].score;
-  document.getElementById("numberThreePlayerScore").innerText =
-    "Posição 3 - Jogador: " + scoreBoard[2].id + " - " + scoreBoard[2].score;
+  socket.emit("nextplayer", "");
 };
 
 /**
