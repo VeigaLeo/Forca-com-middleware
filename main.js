@@ -1,3 +1,6 @@
+var express = require('express')();
+var http = require('http').createServer(express);
+var io = require('socket.io')(http);
 const { app, BrowserWindow } = require("electron");
 
 function createWindow() {
@@ -39,5 +42,15 @@ app.on("activate", () => {
   }
 });
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+io.on('connection', (socket) => {
+  const totalPlayers = socket.client.conn.server.clientsCount;
+
+  if(totalPlayers <= 3){
+    socket.broadcast.emit('newplayer', { playerId: totalPlayers });
+  }
+});
+
+http.listen(5000, () => {
+  console.log('Forca rodando na porta 5000');
+});
+
