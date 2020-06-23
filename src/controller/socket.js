@@ -94,6 +94,7 @@ socket.on('getcurrentwords', (words) => {
  * @author Leonardo Veiga
  */
 socket.on('getcurrentaward', (award) =>{
+  currentAward = award;
   $('#currentAward').text(award);
 });
  

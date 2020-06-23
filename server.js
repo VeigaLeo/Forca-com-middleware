@@ -15,7 +15,10 @@ let totalPlayersPlaying = 0;
 let currentWords = [];
 
 // Prêmio atual
-let currentAward = 500;
+let currentAward = Math.floor(Math.random() * 2000);
+
+// Letras já escolhidas da rodada
+let chosenLetters = [];
 
 /**
  * Método principal para manipular conexões do socket.io
@@ -142,6 +145,26 @@ io.on('connection', (socket) => {
     socket.on('setnewaward', (award) => {
       currentAward = award;
       io.emit('getcurrentaward', currentAward);
+    });
+
+    /**
+     * Inclui no array de letras já escolhidas a letra informada
+     * 
+     * @author Guilherme Martin
+     * @author Leonardo Veiga
+     */
+    socket.on('chosenletter', (letter) => {
+      chosenLetters.push(letter);
+    });
+
+    /**
+     * Recupera as letras já escolhidas da rodada atual
+     * 
+     * @author Guilherme Martin
+     * @author Leonardo Veiga
+     */
+    socket.on('getchosenletters', (letter) => {
+      io.emit('getchosenletters', chosenLetters);
     });
   });
   

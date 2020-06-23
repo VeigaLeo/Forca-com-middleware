@@ -5,7 +5,7 @@ let uniqueId;
 let playerId;
 
 // Variáveis do jogo
-let currentAward = getCurrentAward();
+let currentAward = 0;
 let currentPlayerIdQueue = 0;
 let currentUniquePlayerId = 0;
 let players = [];
@@ -23,6 +23,7 @@ let wordStatus = [];
  */
 $(document).ready(() => {
   handleUserPrompt();
+  getCurrentAward();
   initGame();
 });
 
@@ -134,18 +135,19 @@ const handleUserChoice = chosenLetter => {
     document.getElementById(chosenLetter).setAttribute("disabled", true);
     answer.forEach(element => {
       if (element.indexOf(chosenLetter) >= 0) {
+        foundLetter = true;
         getCurrentAward();
 
         players[currentPlayerIdQueue].score =
           players[currentPlayerIdQueue].score + currentAward;
 
-        foundLetter = true;
-        handlePlayerTurn();
         wordChoose();
         winConditional();
 
         socket.emit("foundletter", { uniqueId: uniqueId });
         socket.emit("updatescoreboard", "");
+
+        handlePlayerTurn();
       }
     });
 
