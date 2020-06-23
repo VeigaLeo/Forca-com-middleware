@@ -5,7 +5,7 @@ let uniqueId;
 let playerId;
 
 // Variáveis do jogo
-let currentAward = 0;
+let currentAward = 500;
 let currentPlayerIdQueue = 0;
 let currentUniquePlayerId = 0;
 
@@ -37,6 +37,7 @@ const initGame = () => {
   randomWord();
   generateButtons();
   wordChoose();
+  getCurrentAward();
   handleUserChoice("2");
 };
 
@@ -106,19 +107,26 @@ const handleUserChoice = chosenLetter => {
     document.getElementById(chosenLetter).setAttribute("disabled", true);
     answer.forEach(element => {
       if (element.indexOf(chosenLetter) >= 0) {
+        getCurrentAward();
+
         players[currentPlayerIdQueue].score =
-          players[currentPlayerIdQueue].score + 500;
+          players[currentPlayerIdQueue].score + currentAward;
 
         foundLetter = true;
         handlePlayerTurn();
         wordChoose();
         winConditional();
 
-        socket.emit("foundletter", { socketId: socket.id });
+        socket.emit("foundletter", { uniqueId: uniqueId });
+        socket.emit("updatescoreboard", "");
       }
     });
 
     if (!foundLetter) {
+      socket.emit("updatescoreboard", "");
+
+      setRandomAward();
+      getCurrentAward();
       nextPlayer();
       handlePlayerTurn();
     }
@@ -127,15 +135,34 @@ const handleUserChoice = chosenLetter => {
   }
 };
 
+const setRandomAward = () => {
+  var award = Math.floor(Math.random() * 2000);
+
+  socket.emit("setnewaward", award);
+};
+
 /**
- * Next player conditional
+ * Método recupera o prêmio da rodada atual
+ *
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
+ */
+const getCurrentAward = () => {
+  socket.emit("getcurrentaward", "");
+};
+
+/**
+ * Método para enviar comando ao socket para chamar o próximo jogador
+ *
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
  */
 const nextPlayer = () => {
   socket.emit("nextplayer", "");
 };
 
 /**
- * Win conditional
+ * Condição de vitória
  */
 const winConditional = () => {
   const answerArray = answer.toString();

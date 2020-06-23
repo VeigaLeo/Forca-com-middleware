@@ -6,8 +6,8 @@ var socket = io('http://localhost:5000');
  * @author Guilherme Martin
  * @author Leonardo Veiga
  */
-socket.on('updatescoreboard', function(players){
-    let scoreBoard = players.sort(function(a,b) {
+socket.on('updatescoreboard', function(playersScore){
+    let scoreBoard = playersScore.sort(function(a,b) {
         return a.score > b.score ? -1 : a.score < b.score ? 1 : 0;
     });
 
@@ -16,6 +16,8 @@ socket.on('updatescoreboard', function(players){
     for(let i=0; i<scoreBoard.length; i++){
        htmlPlacar += '<span>' + scoreBoard[i].uniqueId + ' - ' + scoreBoard[i].score + '</span><br>';
     }   
+
+    players = playersScore;
 
     $('#anchorJogadores').html(htmlPlacar);
 });

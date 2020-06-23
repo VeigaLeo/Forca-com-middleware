@@ -15,7 +15,7 @@ let totalPlayersPlaying = 0;
 let currentWords = [];
 
 // Prêmio atual
-let currentAward = 0;
+let currentAward = 500;
 
 /**
  * Método principal para manipular conexões do socket.io
@@ -67,7 +67,7 @@ io.on('connection', (socket) => {
     
       for(let i=0; i<players.length; i++){
         if(players[i].uniqueId === socketUniqueId){
-          players[i].score =+ 500;
+          players[i].score += currentAward;
         }
       } 
   
@@ -141,6 +141,7 @@ io.on('connection', (socket) => {
      */
     socket.on('setnewaward', (award) => {
       currentAward = award;
+      io.emit('getcurrentaward', currentAward);
     });
   });
   
