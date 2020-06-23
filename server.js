@@ -199,6 +199,16 @@ io.on('connection', (socket) => {
     socket.on('getchosenletters', (letter) => {
       io.emit('getchosenletters', chosenLetters);
     });
+
+    /**
+     * Retorna o id do player atual na fila
+     * 
+     * @author Guilherme Martin
+     * @author Leonardo Veiga
+     */
+    socket.on('getcurrentplayerqueue', (player) => {
+      io.emit('getcurrentplayerqueue', currentPlayer);
+    });
   });
   
   /**

@@ -42,8 +42,8 @@ const handleUserPrompt = () => {
     socket.emit("updatescoreboard", "");
     socket.emit("getchosenletters", "");
     socket.emit("getcurrentwords", "");
+    socket.emit("getcurrentplayerqueue", "");
 
-    handlePlayerTurn();
     wordChoose("");
     handleUserChoice("");
   });
@@ -59,6 +59,7 @@ const initGame = () => {
   generateButtons();
   getCurrentAward();
   wordChoose("");
+  handlePlayerTurn();
 };
 
 /**
@@ -149,7 +150,6 @@ const handleUserChoice = chosenLetter => {
       setRandomAward();
       getCurrentAward();
       nextPlayer();
-      handlePlayerTurn();
     }
   } else {
     toastr.error("Aguarde sua vez");
@@ -186,6 +186,7 @@ const getCurrentAward = () => {
  */
 const nextPlayer = () => {
   socket.emit("nextplayer", "");
+  handlePlayerTurn();
 };
 
 /**

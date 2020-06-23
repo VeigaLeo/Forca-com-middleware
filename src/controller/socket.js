@@ -19,6 +19,8 @@ socket.on('updatescoreboard', function(playersScore){
 
     players = playersScore;
 
+    handlePlayerTurn();
+
     $('#anchorJogadores').html(htmlPlacar);
 });
 
@@ -74,6 +76,7 @@ socket.on('getallplayers', function(playersServer){
  */
 socket.on('nextplayer', function(currentPlayerId){
     currentPlayerIdQueue = currentPlayerId;
+    handlePlayerTurn();
 });
 
 /**
@@ -96,6 +99,16 @@ socket.on('getcurrentwords', (words) => {
 socket.on('getcurrentaward', (award) =>{
   currentAward = award;
   $('#currentAward').text(award);
+});
+
+/**
+ * Retorna o id do jogador atual da fila
+ * 
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
+ */
+socket.on('getcurrentplayerqueue', (player) => {
+    currentPlayerIdQueue = player;
 });
  
 /**
