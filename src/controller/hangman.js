@@ -5,20 +5,33 @@ let uniqueId;
 let playerId;
 
 // Variáveis do jogo
-let currentAward = 500;
+let currentAward = getCurrentAward();
 let currentPlayerIdQueue = 0;
 let currentUniquePlayerId = 0;
-
 let players = [];
+
+// Variáveis da forca
 let answer = [];
 let guessed = [];
 let wordStatus = [];
 
+/**
+ * Método principal (executado quando o body do electron está totalmente carregado)
+ *
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
+ */
 $(document).ready(() => {
   handleUserPrompt();
   initGame();
 });
 
+/**
+ * Mostra um prompt para o usuário digitar o login.
+ *
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
+ */
 const handleUserPrompt = () => {
   swal("Usuário:", {
     content: "input"
@@ -30,7 +43,10 @@ const handleUserPrompt = () => {
 };
 
 /**
- * Main function that executes the game
+ * Função principal para o funcionamento do jogo
+ *
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
  */
 const initGame = () => {
   handlePlayerTurn();
@@ -42,7 +58,10 @@ const initGame = () => {
 };
 
 /**
- * handle which player is playing
+ * Handler para controlar o turno do usuário
+ *
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
  */
 const handlePlayerTurn = () => {
   if (players.length !== 0) {
@@ -58,7 +77,10 @@ const handlePlayerTurn = () => {
 };
 
 /**
- * Generate 3 random words when game start
+ * Gera três palavras randômicas
+ *
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
  */
 const randomWord = () => {
   for (let i = 0; i < 3; i++) {
@@ -67,7 +89,10 @@ const randomWord = () => {
 };
 
 /**
- * Render the alphabet on the screen
+ * Renderiza o alfabeto na tela do electron
+ *
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
  */
 const generateButtons = () => {
   const buttonsHTML = "abcdefghijklmnopqrstuvwxyz"
@@ -96,8 +121,10 @@ const generateButtons = () => {
 };
 
 /**
- * Handle the letter that the user has chosen
- * @param {string} chosenLetter the letter of the alphabet that the user has choose
+ * Handler para verificar a letra escolhida pelo usuário
+ *
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
  */
 const handleUserChoice = chosenLetter => {
   if (currentPlayerIdQueue === playerId) {
@@ -135,6 +162,12 @@ const handleUserChoice = chosenLetter => {
   }
 };
 
+/**
+ * Método seta um prêmio randomico para a rodada atual
+ *
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
+ */
 const setRandomAward = () => {
   var award = Math.floor(Math.random() * 2000);
 
@@ -163,6 +196,11 @@ const nextPlayer = () => {
 
 /**
  * Condição de vitória
+ *
+ * TODO: MUDAR PARA DEIXAR O JOGO INFINITO
+ *
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
  */
 const winConditional = () => {
   const answerArray = answer.toString();
@@ -195,7 +233,10 @@ const winConditional = () => {
 };
 
 /**
- * Verify if the word that user has choose exists in the answer array
+ * Verifica se a letra escolhida pelo usuário existe nas palavras
+ *
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
  */
 const wordChoose = () => {
   answer.forEach(element => {
