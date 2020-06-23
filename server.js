@@ -20,6 +20,24 @@ let currentAward = Math.floor(Math.random() * 2000);
 // Letras já escolhidas da rodada
 let chosenLetters = [];
 
+// Palavras randomicas
+let randomWords = [
+  "python",
+  "javascript",
+  "mongodb",
+  "json",
+  "java",
+  "html",
+  "css",
+  "c",
+  "csharp",
+  "golang",
+  "kotlin",
+  "php",
+  "sql",
+  "ruby"
+];
+
 /**
  * Método principal para manipular conexões do socket.io
  * 
@@ -39,10 +57,23 @@ io.on('connection', (socket) => {
   socket.on('registernewplayer', (newPlayer) => {
       const found = players.find(element => element.uniqueId === newPlayer.uniqueId);
       
+      if(players.length === 0){
+        chosenLetters = [];
+        currentAward = Math.floor(Math.random() * 2000);
+        
+        for (let i = 0; i < 3; i++) {
+          currentWords.push(
+            randomWords[
+              Math.floor(Math.random() * randomWords.length)
+            ]
+          );
+        }
+      }
+
       if(!found){
         let player = {
-          playerId: currentPlayer, 
-          socketId: newPlayer.id, 
+          playerId: totalPlayersPlaying, 
+          socketId: socket.id, 
           uniqueId: newPlayer.uniqueId, 
           score: 0
         };
@@ -55,6 +86,7 @@ io.on('connection', (socket) => {
         io.to(socket.id).emit('alreadyregisterplayer', found);
       }
 
+      io.emit('getcurrentwords', currentWords);
       io.emit('updatescoreboard', players);
     })
   
@@ -155,6 +187,7 @@ io.on('connection', (socket) => {
      */
     socket.on('chosenletter', (letter) => {
       chosenLetters.push(letter);
+      io.emit('getchosenletters', chosenLetters);
     });
 
     /**

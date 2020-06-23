@@ -40,6 +40,12 @@ const handleUserPrompt = () => {
     socket.emit("registernewplayer", { uniqueId: value });
     socket.emit("getallplayers", "");
     socket.emit("updatescoreboard", "");
+    socket.emit("getchosenletters", "");
+    socket.emit("getcurrentwords", "");
+
+    handlePlayerTurn();
+    wordChoose("");
+    handleUserChoice("");
   });
 };
 
@@ -50,12 +56,9 @@ const handleUserPrompt = () => {
  * @author Leonardo Veiga
  */
 const initGame = () => {
-  handlePlayerTurn();
-  randomWord();
   generateButtons();
-  wordChoose();
   getCurrentAward();
-  handleUserChoice("2");
+  wordChoose("");
 };
 
 /**
@@ -74,18 +77,6 @@ const handlePlayerTurn = () => {
       " pontos";
 
     document.getElementById("player").innerHTML = playerTurn;
-  }
-};
-
-/**
- * Gera três palavras randômicas
- *
- * @author Guilherme Martin
- * @author Leonardo Veiga
- */
-const randomWord = () => {
-  for (let i = 0; i < 3; i++) {
-    answer.push(words[Math.floor(Math.random() * words.length)]);
   }
 };
 
@@ -130,6 +121,7 @@ const generateButtons = () => {
 const handleUserChoice = chosenLetter => {
   if (currentPlayerIdQueue === playerId) {
     let foundLetter = false;
+    socket.emit("chosenletter", chosenLetter);
 
     guessed.indexOf(chosenLetter) === -1 ? guessed.push(chosenLetter) : null;
     document.getElementById(chosenLetter).setAttribute("disabled", true);
@@ -141,7 +133,7 @@ const handleUserChoice = chosenLetter => {
         players[currentPlayerIdQueue].score =
           players[currentPlayerIdQueue].score + currentAward;
 
-        wordChoose();
+        wordChoose(element);
         winConditional();
 
         socket.emit("foundletter", { uniqueId: uniqueId });
@@ -240,13 +232,15 @@ const winConditional = () => {
  * @author Guilherme Martin
  * @author Leonardo Veiga
  */
-const wordChoose = () => {
+const wordChoose = chosenLetter => {
   answer.forEach(element => {
     wordStatus = [
       ...wordStatus,
       element
         .split("")
-        .map(letter => (guessed.indexOf(letter) > 0 ? letter : " _ "))
+        .map(chosenLetter =>
+          guessed.indexOf(chosenLetter) > 0 ? chosenLetter : " _ "
+        )
         .join("")
     ];
   });

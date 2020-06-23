@@ -40,7 +40,6 @@ socket.on('successregisternewplayer', function(newPlayer){
     });
 
     handlePlayerTurn();
-
     toastr.success('Registro efetuado', 'Sucesso em efetuar o registro, bom jogo!');
 });
 
@@ -84,7 +83,8 @@ socket.on('nextplayer', function(currentPlayerId){
   * @author Leonardo Veiga
   */
 socket.on('getcurrentwords', (words) => {
-   //TODO RETORNAR AS PALAVRAS E FAZER A LOGICA PARA PREENCHER O QUE JA FOI PREENCHIDO
+   answer = words;
+   wordChoose('');
 });
  
 /**
@@ -98,3 +98,17 @@ socket.on('getcurrentaward', (award) =>{
   $('#currentAward').text(award);
 });
  
+/**
+ * Recupera as letras já escolhidas na rodada
+ * 
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
+ */
+socket.on('getchosenletters', (letters) => {
+    guessed = letters;
+
+    for(let i=0; i<letters.length; i++){
+        wordChoose(letters[i]);
+        document.getElementById(letters[i]).setAttribute("disabled", true);
+    }
+});
