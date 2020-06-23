@@ -1,15 +1,30 @@
 const words = require("../utils/words");
 
+// Variáveis do usuário
+let uniqueId;
+let playerId;
+
+// Variáveis do jogo
+let currentPlayerIdQueue;
+let currentUniquePlayerId;
+
 let players = [];
-let playerId = null;
-let currentPlayer = 0;
 let answer = [];
 let guessed = [];
 let wordStatus = [];
 
 $(document).ready(() => {
+  handleUserPrompt();
   initGame();
 });
+
+const handleUserPrompt = () => {
+  swal("Usuário:", {
+    content: "input"
+  }).then(value => {
+    socket.emit("registernewplayer", { uniqueId: value });
+  });
+};
 
 /**
  * Main function that executes the game
@@ -20,11 +35,6 @@ const initGame = () => {
   generateButtons();
   wordChoose();
   handleUserChoice("2");
-  printUserName();
-};
-
-const printUserName = () => {
-  $("#jogador").text("Jogador " + currentPlayer + 1);
 };
 
 /**
@@ -34,9 +44,9 @@ const handlePlayerTurn = () => {
   if (players.length !== 0) {
     let playerTurn =
       "Vez do jogador: " +
-      players[currentPlayer].id +
+      players[currentPlayerId].id +
       " - " +
-      players[currentPlayer].score +
+      players[currentPlayerId].score +
       " pontos";
 
     document.getElementById("player").innerHTML = playerTurn;
@@ -86,14 +96,14 @@ const generateButtons = () => {
  * @param {string} chosenLetter the letter of the alphabet that the user has choose
  */
 const handleUserChoice = chosenLetter => {
-  if (currentPlayer === playerId) {
+  if (currentPlayerIdQueue === playerId) {
     let foundLetter = false;
 
     guessed.indexOf(chosenLetter) === -1 ? guessed.push(chosenLetter) : null;
     document.getElementById(chosenLetter).setAttribute("disabled", true);
     answer.forEach(element => {
       if (element.indexOf(chosenLetter) >= 0) {
-        players[currentPlayer].score = players[currentPlayer].score + 500;
+        players[currentPlayerId].score = players[currentPlayerId].score + 500;
 
         foundLetter = true;
         handlePlayerTurn();

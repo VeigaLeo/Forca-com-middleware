@@ -1,16 +1,7 @@
 var socket = io('http://localhost:5000');
 
-socket.on('connect', function(socket){
-    // toastr.success('Sucesso ao conectar ao jogo', 'Boa sorte!');
-});
-
-socket.on('newplayer', function(data){
-    // toastr.success('Novo jogador!', 'Jogador ' + data.playerId + ' entrou na partida!');
-});
-
-socket.on('disconnect', function(){
-    // toastr.error('Jogador desconectado!', '');
-});
+socket.on('connect', function(socket){});
+socket.on('disconnect', function(){});
 
 socket.on('updatescoreboard', function(players){
     let scoreBoard = players.sort(function(a,b) {
@@ -24,13 +15,27 @@ socket.on('updatescoreboard', function(players){
     }   
 });
 
-socket.on('registerplayer', function(newPlayerId){
-    if(playerId === null){
-        playerId = newPlayerId;
-        players.push({ playerId: playerId, socketId: socket.id, score: 0 });
-    }
+socket.on('successregisternewplayer', function(newPlayer){
+    uniqueId = newPlayer.uniqueId;
+    playerId = newPlayer.playerId;
+    
+    players.push({ 
+        playerId: newPlayer.playerId, 
+        socketId: newPlayer.id, 
+        uniqueId: newPlayer.uniqueId, 
+        score: 0 
+    });
+
+    toastr.success('Registro efetuado', 'Sucesso em efetuar o registro, bom jogo!');
+});
+
+socket.on('alreadyregisterplayer', function(player){
+    uniqueId = player.uniqueId;
+    playerId = player.playerId;
+
+    toastr.info('Usuário já cadastrado', 'Não é necessário efetuar o registro novamente.')
 });
 
 socket.on('nextplayer', function(currentPlayerId){
-    currentPlayer = currentPlayerId;
+    currentPlayerIdQueue = currentPlayerId;
 });
