@@ -2,9 +2,20 @@ var express = require('express')();
 var http = require('http').createServer(express);
 var io = require('socket.io')(http);
 
+// Array para organizar os jogadores
 let players = [];
+
+// Vez do jogador na fila
 let currentPlayer = 0;
+
+// Número de jogadores
 let totalPlayersPlaying = 0;
+
+// Palavras da rodada atual
+let currentWords = [];
+
+// Prêmio atual
+let currentAward = 0;
 
 /**
  * Método principal para manipular conexões do socket.io
@@ -40,6 +51,8 @@ io.on('connection', (socket) => {
       }else{
         io.to(socket.id).emit('alreadyregisterplayer', found);
       }
+
+      io.emit('updatescoreboard', players);
     })
   
     /**
@@ -58,7 +71,7 @@ io.on('connection', (socket) => {
         }
       } 
   
-      socket.broadcast.emit('updatescoreboard', players);
+      io.emit('updatescoreboard', players);
     });
   
     /**
@@ -69,15 +82,65 @@ io.on('connection', (socket) => {
      * @author Leonardo Veiga
      */
     socket.on('nextplayer', (player) => {
-      if(player[currentPlayer + 1] !== null){
+      if(players[currentPlayer + 1] !== null && players[currentPlayer + 1] !== undefined){
         currentPlayer += 1;
         
-        socket.broadcast.emit('nextplayer', player[currentPlayer].playerId);
+        io.emit('nextplayer', players[currentPlayer].playerId);
       }else{
         currentPlayer = 0;
 
-        socket.broadcast.emit('nextplayer', player[0].playerId);
+        io.emit('nextplayer', players[0].playerId);
       }
+    });
+
+    /**
+     * Método retorna todos os jogadores
+     * 
+     * @author Guilherme Martin
+     * @author Leonardo Veiga
+     */
+    socket.on('getallplayers', (player) => {
+      io.to(socket.id).emit('getallplayers', players);
+    });
+
+    /**
+     * Método retorna as palavras da rodada atual
+     * 
+     * @author Guilherme Martin
+     * @author Leonardo Veiga
+     */
+    socket.on('getcurrentwords', (words) => {
+      io.to(socket.id).emit('getcurrentwords', currentWords);
+    });
+
+    /**
+     * Atualiza as palavras da rodada atual
+     * 
+     * @author Guilherme Martin
+     * @author Leonardo Veiga
+     */
+    socket.on('setnewwords', (words) => {
+      currentWords = words;
+    });
+
+    /**
+     * Método retorna a premiação da rodada atual
+     * 
+     * @author Guilherme Martin
+     * @author Leonardo Veiga
+     */
+    socket.on('getcurrentaward', (award) =>{
+      io.emit('getcurrentaward', currentAward);
+    });
+
+    /**
+     * Atualiza a premiação da rodada
+     * 
+     * @author Guilherme Martin
+     * @author Leonardo Veiga
+     */
+    socket.on('setnewaward', (award) => {
+      currentAward = award;
     });
   });
   

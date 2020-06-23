@@ -5,8 +5,9 @@ let uniqueId;
 let playerId;
 
 // Variáveis do jogo
-let currentPlayerIdQueue;
-let currentUniquePlayerId;
+let currentAward = 0;
+let currentPlayerIdQueue = 0;
+let currentUniquePlayerId = 0;
 
 let players = [];
 let answer = [];
@@ -23,6 +24,8 @@ const handleUserPrompt = () => {
     content: "input"
   }).then(value => {
     socket.emit("registernewplayer", { uniqueId: value });
+    socket.emit("getallplayers", "");
+    socket.emit("updatescoreboard", "");
   });
 };
 
@@ -44,9 +47,9 @@ const handlePlayerTurn = () => {
   if (players.length !== 0) {
     let playerTurn =
       "Vez do jogador: " +
-      players[currentPlayerId].id +
+      players[currentPlayerIdQueue].uniqueId +
       " - " +
-      players[currentPlayerId].score +
+      players[currentPlayerIdQueue].score +
       " pontos";
 
     document.getElementById("player").innerHTML = playerTurn;
@@ -103,7 +106,8 @@ const handleUserChoice = chosenLetter => {
     document.getElementById(chosenLetter).setAttribute("disabled", true);
     answer.forEach(element => {
       if (element.indexOf(chosenLetter) >= 0) {
-        players[currentPlayerId].score = players[currentPlayerId].score + 500;
+        players[currentPlayerIdQueue].score =
+          players[currentPlayerIdQueue].score + 500;
 
         foundLetter = true;
         handlePlayerTurn();
@@ -148,9 +152,9 @@ const winConditional = () => {
       return obj.score == maxScore;
     });
 
-    const playerWon =
+    let playerWon =
       "Jogador " +
-      winnerPlayer.id +
+      winnerPlayer.uniqueId +
       " ganhou a partida com " +
       winnerPlayer.score +
       " pontos";

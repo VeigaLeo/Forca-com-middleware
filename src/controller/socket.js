@@ -1,20 +1,31 @@
 var socket = io('http://localhost:5000');
 
-socket.on('connect', function(socket){});
-socket.on('disconnect', function(){});
-
+/**
+ * Recebe a informação do servidor do placar atualizado
+ * 
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
+ */
 socket.on('updatescoreboard', function(players){
     let scoreBoard = players.sort(function(a,b) {
         return a.score > b.score ? -1 : a.score < b.score ? 1 : 0;
     });
 
-    for(let i=0; i<players.length; i++){
-        if(i === 0) $('#numberOnePlayerScore').text('Posição 1 - Jogador: ' + scoreBoard[0].playerId + " - " + scoreBoard[0].score);
-        if(i === 1) $('#numberTwoPlayerScore').text('Posição 2 - Jogador: ' + scoreBoard[1].playerId + " - " + scoreBoard[1].score);
-        if(i === 2) $('#numberThreePlayerScore').text('Posição 3 - Jogador: ' + scoreBoard[2].playerId + " - " + scoreBoard[2].score);
+    let htmlPlacar = '';
+
+    for(let i=0; i<scoreBoard.length; i++){
+       htmlPlacar += '<span>' + scoreBoard[i].uniqueId + ' - ' + scoreBoard[i].score + '</span><br>';
     }   
+
+    $('#anchorJogadores').html(htmlPlacar);
 });
 
+/**
+ * Recebe a informação do socket.io de sucesso de registro
+ * 
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
+ */
 socket.on('successregisternewplayer', function(newPlayer){
     uniqueId = newPlayer.uniqueId;
     playerId = newPlayer.playerId;
@@ -26,9 +37,17 @@ socket.on('successregisternewplayer', function(newPlayer){
         score: 0 
     });
 
+    handlePlayerTurn();
+
     toastr.success('Registro efetuado', 'Sucesso em efetuar o registro, bom jogo!');
 });
 
+/**
+ * Recebe a informação do socket.io se um usuário já está cadastrado
+ * 
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
+ */
 socket.on('alreadyregisterplayer', function(player){
     uniqueId = player.uniqueId;
     playerId = player.playerId;
@@ -36,6 +55,43 @@ socket.on('alreadyregisterplayer', function(player){
     toastr.info('Usuário já cadastrado', 'Não é necessário efetuar o registro novamente.')
 });
 
+/**
+ * Recebe a informação do socket.io de todos os jogadores
+ * 
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
+ */
+socket.on('getallplayers', function(playersServer){
+    players = playersServer;
+});
+
+/**
+ * Recebe a informação do socket.io de quem é o próximo jogador
+ * 
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
+ */
 socket.on('nextplayer', function(currentPlayerId){
     currentPlayerIdQueue = currentPlayerId;
 });
+
+/**
+  * Método retorna as palavras da rodada atual
+  * 
+  * @author Guilherme Martin
+  * @author Leonardo Veiga
+  */
+socket.on('getcurrentwords', (words) => {
+   //TODO RETORNAR AS PALAVRAS E FAZER A LOGICA PARA PREENCHER O QUE JA FOI PREENCHIDO
+});
+ 
+/**
+ * Método retorna a premiação da rodada atual
+ * 
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
+ */
+socket.on('getcurrentaward', (award) =>{
+  $('#currentAward').text(award);
+});
+ 
