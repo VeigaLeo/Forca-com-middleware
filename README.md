@@ -9,7 +9,7 @@ O projeto possui quatro etapas, onde em cada etapa foram sendo implementados nov
    Adição do `Socket.io` para o multiprocessamento, versão do jogo onde é possível dois clientes se comunicar com o servidor.
   ## Etapa 3
   Versão do jogo baseado em RPC, em tempo real, ainda utilizando `Socket.io`, jogadores pontuam, o jogo ainda não é "infinito".
-  ## Etapa 4 (final)
+  ## Etapa 4 (Final)
   Versão do jogo em tempo real, capaz de suportar quantos jogadores quiser. Jogo infinito, onde cada vez que as três palavras são reveladas, o jogo sorteia novas três palavras, mas os jogadores continuam pontuando de onde estavam. Caso um jogador deseja se desconectar ele será removido da fila, e caso ele quiser voltar, a sua quantidade de pontos deverá voltar ao que era antes.
   
 # Instalação
