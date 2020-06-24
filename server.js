@@ -28,6 +28,12 @@ let chosenLetters = [];
  * @author Leonardo Veiga
  */
 io.on("connection", socket => {
+  /**
+   * Método para verificar se algum jogador desconectou do jogo
+   *
+   * @author Guilherme Martin
+   * @author Leonardo Veiga
+   */
   socket.on("disconnect", () => {
     const player = players.find(e => e.socketId === socket.id);
     players = players.filter(e => {
@@ -35,6 +41,7 @@ io.on("connection", socket => {
     });
     totalPlayersPlaying -= 1;
   });
+
   /**
    * Método vai para a próxima rodada
    *
