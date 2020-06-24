@@ -47,6 +47,28 @@ let randomWords = [
 io.on('connection', (socket) => {
   
   /**
+   * Método vai para a próxima rodada
+   * 
+   * @author Guilherme Martin
+   * @author Leonardo Veiga
+   */
+  socket.on('nextround', (round) => {
+    currentWords = [];
+    chosenLetters = [];
+    currentAward = Math.floor(Math.random() * 2000);
+    
+    for (let i = 0; i < 3; i++) {
+      currentWords.push(
+        randomWords[
+          Math.floor(Math.random() * randomWords.length)
+        ]
+      );
+    }
+
+    io.emit('nextround', currentWords);
+  });
+
+  /**
    * Método para registrar novo jogador, caso já tenha um jogador existente
    * com o mesmo id fornecido pelo usuário, retorna os detalhes do jogador 
    * já existente.

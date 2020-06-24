@@ -125,3 +125,23 @@ socket.on('getchosenletters', (letters) => {
         document.getElementById(letters[i]).setAttribute("disabled", true);
     }
 });
+
+/**
+ * Método vai para a próxima rodada
+ * 
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
+ */
+socket.on('nextround', (round) => {
+    let buttonsHTML = "abcdefghijklmnopqrstuvwxyz";
+    answer = round;
+    wordStatus = [];
+    guessed = [];
+
+    for(let i=0; i<buttonsHTML.length; i++){
+        document.getElementById(buttonsHTML[i]).removeAttribute("disabled");
+    }
+
+    wordChoose();
+    handlePlayerTurn();
+});

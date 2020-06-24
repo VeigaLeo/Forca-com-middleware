@@ -59,7 +59,6 @@ const initGame = () => {
   generateButtons();
   getCurrentAward();
   wordChoose("");
-  handlePlayerTurn();
 };
 
 /**
@@ -202,28 +201,7 @@ const winConditional = () => {
   const answerStatusArray = wordStatus.slice(-3).toString();
 
   if (answerArray === answerStatusArray) {
-    var maxScore = Math.max.apply(
-      Math,
-      players.map(function (obj) {
-        return obj.score;
-      })
-    );
-    var winnerPlayer = players.find(function (obj) {
-      return obj.score == maxScore;
-    });
-
-    let playerWon =
-      "Jogador " +
-      winnerPlayer.uniqueId +
-      " ganhou a partida com " +
-      winnerPlayer.score +
-      " pontos";
-
-    document.getElementById("playerWon").innerHTML = playerWon;
-    document.getElementById("player").innerHTML = "";
-    document.getElementById("keyboard").innerHTML = "";
-    document.getElementById("instructions").innerHTML =
-      "As palavras sorteadas foram: ";
+    socket.emit("nextround", "");
   }
 };
 
