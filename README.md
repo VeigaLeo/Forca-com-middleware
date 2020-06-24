@@ -1,5 +1,5 @@
 # Forca com middleware
- Jogo similar ao Roda Roda Jequiti implementando práticas de middleware, onde vários usuários podem jogar em tempo real. O projeto conta com sistema de pontuação lógica, registro de usuário, onde caso o usuário se desconecte e volte ao jogo, sua pontuação será mantida. Jogo em formato "infinito", caso as palavras forem adivinhadas, o servidor escolherá outras palavras para os jogadores.
+ Jogo similar ao Roda Roda Jequiti implementando práticas de middleware. Vários usuários podem jogar em tempo real. O projeto conta com sistema de pontuação lógica, registro de usuário, onde caso o usuário se desconecte e volte ao jogo, sua pontuação será mantida. Jogo em formato "infinito", caso as palavras forem adivinhadas, o servidor escolherá outras palavras para os jogadores.
 
 # Estrutura
 O projeto possui quatro etapas, onde em cada etapa foram sendo implementados novas capacidades e funcionalidades relacionadas à sistemas distribuidos.
