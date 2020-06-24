@@ -53,6 +53,13 @@ socket.on("successregisternewplayer", function (newPlayer) {
   );
 });
 
+socket.on("userdisconneted", id => {
+  const player = players.find(e => e.socketId === id);
+  players = players.filter(e => {
+    return e.socketId != player.socketId;
+  });
+});
+
 /**
  * Recebe a informação do socket.io se um usuário já está cadastrado
  *

@@ -28,6 +28,10 @@ let chosenLetters = [];
  * @author Leonardo Veiga
  */
 io.on("connection", socket => {
+  socket.on("disconnect", () => {
+    io.emit("userdisconneted", socket.id);
+    console.log(socket.id, "user disconnected");
+  });
   /**
    * Método vai para a próxima rodada
    *
@@ -212,6 +216,10 @@ io.on("connection", socket => {
     io.emit("getcurrentplayerqueue", currentPlayer);
   });
 });
+
+// io.on("disconnect", socket => {
+//   console.log("disconnect", socket);
+// });
 
 /**
  * Método principal do express para rotear o servidor na porta 5000
