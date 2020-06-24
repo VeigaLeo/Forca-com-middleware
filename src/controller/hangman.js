@@ -42,7 +42,7 @@ const handleUserPrompt = () => {
     socket.emit("getcurrentwords", "");
     socket.emit("getcurrentplayerqueue", "");
 
-    $('#playerName').html('<b>Você: </b>' + value);
+    $("#playerName").html("<b>Você: </b>" + value);
     wordChoose("");
     handleUserChoice();
   });
@@ -226,28 +226,30 @@ const wordChoose = () => {
 
   const wordAnswerArray = wordStatus.slice(wordStatus.length - 3).slice(",");
 
-  document.getElementById("wordSpotlight").innerHTML =
-    `
+  if (wordAnswerArray.length > 0) {
+    document.getElementById("wordSpotlight").innerHTML =
+      `
     <p
       class="word"
     >
       ` +
-    wordAnswerArray[0] +
-    `
+      wordAnswerArray[0] +
+      `
     </p>
     <p
     class="word"
     >
       ` +
-    wordAnswerArray[1] +
-    `
+      wordAnswerArray[1] +
+      `
     </p>
     <p
     class="word"
     >
       ` +
-    wordAnswerArray[2] +
-    `
+      wordAnswerArray[2] +
+      `
     </p>
   `;
+  }
 };
