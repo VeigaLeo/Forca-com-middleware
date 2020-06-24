@@ -217,10 +217,6 @@ io.on("connection", socket => {
   });
 });
 
-// io.on("disconnect", socket => {
-//   console.log("disconnect", socket);
-// });
-
 /**
  * Método principal do express para rotear o servidor na porta 5000
  *
