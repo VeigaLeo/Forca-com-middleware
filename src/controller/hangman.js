@@ -1,5 +1,3 @@
-const words = require("../utils/words");
-
 // Variáveis do usuário
 let uniqueId;
 let playerId;
@@ -45,7 +43,7 @@ const handleUserPrompt = () => {
     socket.emit("getcurrentplayerqueue", "");
 
     wordChoose("");
-    handleUserChoice("");
+    handleUserChoice();
   });
 };
 
@@ -77,6 +75,8 @@ const handlePlayerTurn = () => {
       " pontos";
 
     document.getElementById("player").innerHTML = playerTurn;
+    document.getElementById("playerName").innerHTML =
+      "<b>Você: </b>" + players[currentPlayerIdQueue].uniqueId;
   }
 };
 
@@ -124,6 +124,7 @@ const handleUserChoice = chosenLetter => {
     socket.emit("chosenletter", chosenLetter);
 
     guessed.indexOf(chosenLetter) === -1 ? guessed.push(chosenLetter) : null;
+
     document.getElementById(chosenLetter).setAttribute("disabled", true);
     answer.forEach(element => {
       if (element.indexOf(chosenLetter) >= 0) {
@@ -134,7 +135,7 @@ const handleUserChoice = chosenLetter => {
           players[currentPlayerIdQueue].score + currentAward;
 
         wordChoose(element);
-        winConditional();
+        checkGameState();
 
         socket.emit("foundletter", { uniqueId: uniqueId });
         socket.emit("updatescoreboard", "");
@@ -189,19 +190,21 @@ const nextPlayer = () => {
 };
 
 /**
- * Condição de vitória
+ * Verifica o estado da rodada atual, e se necessário, inicia uma nova para manter o jogo infinito
  *
- * TODO: MUDAR PARA DEIXAR O JOGO INFINITO
  *
  * @author Guilherme Martin
  * @author Leonardo Veiga
  */
-const winConditional = () => {
-  const answerArray = answer.toString();
-  const answerStatusArray = wordStatus.slice(-3).toString();
+const checkGameState = () => {
+  let answerArray = answer.toString();
+  let answerStatusArray = wordStatus.slice(-3).toString();
 
   if (answerArray === answerStatusArray) {
-    socket.emit("nextround", "");
+    toastr.info("Rodada encerrada, aguarde...");
+    setTimeout(() => {
+      socket.emit("nextround", "");
+    }, 3000);
   }
 };
 
@@ -211,15 +214,13 @@ const winConditional = () => {
  * @author Guilherme Martin
  * @author Leonardo Veiga
  */
-const wordChoose = chosenLetter => {
+const wordChoose = () => {
   answer.forEach(element => {
     wordStatus = [
       ...wordStatus,
       element
         .split("")
-        .map(chosenLetter =>
-          guessed.indexOf(chosenLetter) > 0 ? chosenLetter : " _ "
-        )
+        .map(letter => (guessed.indexOf(letter) >= 0 ? letter : " _ "))
         .join("")
     ];
   });
@@ -250,8 +251,4 @@ const wordChoose = chosenLetter => {
     `
     </p>
   `;
-};
-
-module.exports = {
-  initGame
 };

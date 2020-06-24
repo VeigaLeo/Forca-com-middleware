@@ -1,4 +1,4 @@
-const words = [
+module.exports = words = [
   "usar",
   "reverter",
   "deixei",
@@ -48,7 +48,5 @@ const words = [
   "interpretar",
   "permanecer",
   "selecionar",
-  "Ponto"
+  "ponto"
 ];
-
-module.exports = words;
