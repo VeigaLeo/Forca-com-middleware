@@ -42,6 +42,7 @@ const handleUserPrompt = () => {
     socket.emit("getcurrentwords", "");
     socket.emit("getcurrentplayerqueue", "");
 
+    $('#playerName').html('<b>Você: </b>' + value);
     wordChoose("");
     handleUserChoice();
   });
@@ -75,8 +76,6 @@ const handlePlayerTurn = () => {
       " pontos";
 
     document.getElementById("player").innerHTML = playerTurn;
-    document.getElementById("playerName").innerHTML =
-      "<b>Você: </b>" + players[currentPlayerIdQueue].uniqueId;
   }
 };
 
