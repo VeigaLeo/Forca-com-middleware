@@ -53,13 +53,6 @@ socket.on("successregisternewplayer", function (newPlayer) {
   );
 });
 
-socket.on("userdisconneted", id => {
-  const player = players.find(e => e.socketId === id);
-  players = players.filter(e => {
-    return e.socketId != player.socketId;
-  });
-});
-
 /**
  * Recebe a informação do socket.io se um usuário já está cadastrado
  *
@@ -93,6 +86,8 @@ socket.on("getallplayers", function (playersServer) {
  * @author Leonardo Veiga
  */
 socket.on("nextplayer", function (currentPlayerId) {
+  console.log("currentPlayerId", currentPlayerId);
+
   currentPlayerIdQueue = currentPlayerId;
   handlePlayerTurn();
 });
@@ -136,8 +131,6 @@ socket.on("getcurrentplayerqueue", player => {
  * @author Leonardo Veiga
  */
 socket.on("getchosenletters", letters => {
-  console.log(letters);
-
   guessed = letters;
 
   for (let i = 0; i < letters.length; i++) {

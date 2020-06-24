@@ -29,8 +29,11 @@ let chosenLetters = [];
  */
 io.on("connection", socket => {
   socket.on("disconnect", () => {
-    io.emit("userdisconneted", socket.id);
-    console.log(socket.id, "user disconnected");
+    const player = players.find(e => e.socketId === socket.id);
+    players = players.filter(e => {
+      return e.socketId != player.socketId;
+    });
+    totalPlayersPlaying -= 1;
   });
   /**
    * Método vai para a próxima rodada
@@ -120,6 +123,8 @@ io.on("connection", socket => {
    * @author Leonardo Veiga
    */
   socket.on("nextplayer", player => {
+    console.log("players[currentPlayer + 1]", players[currentPlayer]);
+
     if (
       players[currentPlayer + 1] !== null &&
       players[currentPlayer + 1] !== undefined
