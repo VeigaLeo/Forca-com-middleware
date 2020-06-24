@@ -26,7 +26,7 @@ O projeto possui quatro etapas, onde em cada etapa foram sendo implementados nov
 * **Etapa 4**: Execute `git checkout v4.0`, `npm install` para instalar as dependências e o servidor `node server.js` na pasta root do projeto.
 
 # Tecnologias
-NodeJs
-IDE: Visual Studio Code
-Electron
-Socket.io
+- NodeJs
+- IDE: Visual Studio Code
+- Electron
+- Socket.io
