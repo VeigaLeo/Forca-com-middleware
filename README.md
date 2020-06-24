@@ -20,7 +20,7 @@ O projeto possui quatro etapas, onde em cada etapa foram sendo implementados nov
 
 # Executando etapas separadas
 * Para executar o projeto em diferentes etapas, será necessário acessar cada `tag` do projeto.
-* Etapa 1: Para executar a primeira etapa do projeto, execute `git checkout v1.0` em seu terminal, `npm install` para instalar as dependências e em seguida, execute `npm start` para rodar o client do jogo.
-* Etapa 2: A partir da etapa 2, será necessário rodar o servidor junto com a aplicação client. Então `npm install` para instalar as dependências e em seguida execute `git checkout v2.0`, na pasta root do projeto, execute `node main.js`. Após isso abra outra aba do terminal e execute `npm start`.
-* Etapa 3: Execute `npm install` para instalar as dependências e em seguida `git checkout v3.0` e o servidor `node server.js` na pasta root do projeto.
-* Etapa 4: Execute `npm install` para instalar as dependências e em seguida `git checkout v4.0` e o servidor `node server.js` na pasta root do projeto.
+* **Etapa 1**: Para executar a primeira etapa do projeto, execute `git checkout v1.0` em seu terminal, `npm install` para instalar as dependências e em seguida, execute `npm start` para rodar o client do jogo.
+* **Etapa 2**: A partir da etapa 2, será necessário rodar o servidor junto com a aplicação client. Então `git checkout v2.0`, em seguida `npm install` para instalar as dependências. Na pasta root do projeto, execute `node main.js`. Após isso abra outra aba do terminal e execute `npm start`.
+* **Etapa 3**: Execute `git checkout v3.0`, `npm install` para instalar as dependências e o servidor `node server.js` na pasta root do projeto.
+* **Etapa 4**: Execute `git checkout v4.0`, `npm install` para instalar as dependências e o servidor `node server.js` na pasta root do projeto.
