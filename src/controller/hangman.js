@@ -1,63 +1,89 @@
-const words = require("../utils/words");
+// Variáveis do usuário
+let uniqueId;
+let playerId;
 
+// Variáveis do jogo
+let currentAward = 0;
+let currentPlayerIdQueue = 0;
+let currentUniquePlayerId = 0;
+let players = [];
+
+// Variáveis da forca
 let answer = [];
 let guessed = [];
 let wordStatus = [];
-let maxPlayer = 2;
-let currentPlayer = 0;
-let initialCharacter = 0;
-let players = [
-  {
-    id: 1,
-    score: 0
-  },
-  {
-    id: 2,
-    score: 0
-  },
-  {
-    id: 3,
-    score: 0
-  }
-];
 
 /**
- * Main function that executes the game
+ * Método principal (executado quando o body do electron está totalmente carregado)
+ *
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
+ */
+$(document).ready(() => {
+  handleUserPrompt();
+  getCurrentAward();
+  initGame();
+});
+
+/**
+ * Mostra um prompt para o usuário digitar o login.
+ *
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
+ */
+const handleUserPrompt = () => {
+  swal("Usuário:", {
+    content: "input"
+  }).then(value => {
+    socket.emit("registernewplayer", { uniqueId: value });
+    socket.emit("getallplayers", "");
+    socket.emit("updatescoreboard", "");
+    socket.emit("getchosenletters", "");
+    socket.emit("getcurrentwords", "");
+    socket.emit("getcurrentplayerqueue", "");
+
+    $("#playerName").html("<b>Você: </b>" + value);
+    wordChoose("");
+    handleUserChoice();
+  });
+};
+
+/**
+ * Função principal para o funcionamento do jogo
+ *
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
  */
 const initGame = () => {
-  handlePlayerTurn();
-  randomWord();
   generateButtons();
-  wordChoose();
-  handleUserChoice("2");
+  getCurrentAward();
+  wordChoose("");
 };
 
 /**
- * handle which player is playing
+ * Handler para controlar o turno do usuário
+ *
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
  */
 const handlePlayerTurn = () => {
-  const playerTurn =
-    "Vez do jogador: " +
-    players[currentPlayer].id +
-    " - " +
-    players[currentPlayer].score +
-    " pontos";
+  if (players.length !== 0) {
+    let playerTurn =
+      "Vez do jogador: " +
+      players[currentPlayerIdQueue].uniqueId +
+      " - " +
+      players[currentPlayerIdQueue].score +
+      " pontos";
 
-  document.getElementById("player").innerHTML = playerTurn;
-};
-
-/**
- * Generate 3 random words when game start
- */
-const randomWord = () => {
-  for (let i = 0; i < 3; i++) {
-    answer.push(words[Math.floor(Math.random() * words.length)]);
+    document.getElementById("player").innerHTML = playerTurn;
   }
-  console.log(answer);
 };
 
 /**
- * Render the alphabet on the screen
+ * Renderiza o alfabeto na tela do electron
+ *
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
  */
 const generateButtons = () => {
   const buttonsHTML = "abcdefghijklmnopqrstuvwxyz"
@@ -86,95 +112,106 @@ const generateButtons = () => {
 };
 
 /**
- * Handle the letter that the user has chosen
- * @param {string} chosenLetter the letter of the alphabet that the user has choose
+ * Handler para verificar a letra escolhida pelo usuário
+ *
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
  */
 const handleUserChoice = chosenLetter => {
-  let foundLetter = false;
+  if (currentPlayerIdQueue === playerId) {
+    let foundLetter = false;
+    socket.emit("chosenletter", chosenLetter);
 
-  guessed.indexOf(chosenLetter) === -1 ? guessed.push(chosenLetter) : null;
-  document.getElementById(chosenLetter).setAttribute("disabled", true);
-  answer.forEach(element => {
-    if (element.indexOf(chosenLetter) >= 0) {
-      players[currentPlayer].score = players[currentPlayer].score + 500;
+    guessed.indexOf(chosenLetter) === -1 ? guessed.push(chosenLetter) : null;
 
-      foundLetter = true;
-      handlePlayerTurn();
-      wordChoose();
-      winConditional();
-      updateScoreBoard();
-    }
-  });
+    document.getElementById(chosenLetter).setAttribute("disabled", true);
+    answer.forEach(element => {
+      if (element.indexOf(chosenLetter) >= 0) {
+        foundLetter = true;
+        getCurrentAward();
 
-  if (!foundLetter) {
-    nextPlayer();
-    handlePlayerTurn();
-    updateScoreBoard();
-  }
-};
+        players[currentPlayerIdQueue].score =
+          players[currentPlayerIdQueue].score + currentAward;
 
-/**
- * Next player conditional
- */
-const nextPlayer = () => {
-  if (currentPlayer === maxPlayer) {
-    currentPlayer = initialCharacter;
-  } else {
-    currentPlayer++;
-  }
-};
+        wordChoose(element);
+        checkGameState();
 
-/**
- * Update the score board
- */
-const updateScoreBoard = () => {
-  const scoreBoard = players.sort(function (a, b) {
-    return a.score > b.score ? -1 : a.score < b.score ? 1 : 0;
-  });
+        socket.emit("foundletter", { uniqueId: uniqueId });
+        socket.emit("updatescoreboard", "");
 
-  document.getElementById("numberOnePlayerScore").innerText =
-    "Posição 1 - Jogador: " + scoreBoard[0].id + " - " + scoreBoard[0].score;
-  document.getElementById("numberTwoPlayerScore").innerText =
-    "Posição 2 - Jogador: " + scoreBoard[1].id + " - " + scoreBoard[1].score;
-  document.getElementById("numberThreePlayerScore").innerText =
-    "Posição 3 - Jogador: " + scoreBoard[2].id + " - " + scoreBoard[2].score;
-};
-
-/**
- * Win conditional
- */
-const winConditional = () => {
-  const answerArray = answer.toString();
-  const answerStatusArray = wordStatus.slice(-3).toString();
-
-  if (answerArray === answerStatusArray) {
-    var maxScore = Math.max.apply(
-      Math,
-      players.map(function (obj) {
-        return obj.score;
-      })
-    );
-    var winnerPlayer = players.find(function (obj) {
-      return obj.score == maxScore;
+        handlePlayerTurn();
+      }
     });
 
-    const playerWon =
-      "Jogador " +
-      winnerPlayer.id +
-      " ganhou a partida com " +
-      winnerPlayer.score +
-      " pontos";
+    if (!foundLetter) {
+      socket.emit("updatescoreboard", "");
 
-    document.getElementById("playerWon").innerHTML = playerWon;
-    document.getElementById("player").innerHTML = "";
-    document.getElementById("keyboard").innerHTML = "";
-    document.getElementById("instructions").innerHTML =
-      "As palavras sorteadas foram: ";
+      setRandomAward();
+      getCurrentAward();
+      nextPlayer();
+    }
+  } else {
+    toastr.error("Aguarde sua vez");
   }
 };
 
 /**
- * Verify if the word that user has choose exists in the answer array
+ * Método seta um prêmio randomico para a rodada atual
+ *
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
+ */
+const setRandomAward = () => {
+  var award = Math.floor(Math.random() * 2000);
+
+  socket.emit("setnewaward", award);
+};
+
+/**
+ * Método recupera o prêmio da rodada atual
+ *
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
+ */
+const getCurrentAward = () => {
+  socket.emit("getcurrentaward", "");
+};
+
+/**
+ * Método para enviar comando ao socket para chamar o próximo jogador
+ *
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
+ */
+const nextPlayer = () => {
+  socket.emit("nextplayer", "");
+  handlePlayerTurn();
+};
+
+/**
+ * Verifica o estado da rodada atual, e se necessário, inicia uma nova para manter o jogo infinito
+ *
+ *
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
+ */
+const checkGameState = () => {
+  let answerArray = answer.toString();
+  let answerStatusArray = wordStatus.slice(-3).toString();
+
+  if (answerArray === answerStatusArray) {
+    toastr.info("Rodada encerrada, aguarde...");
+    setTimeout(() => {
+      socket.emit("nextround", "");
+    }, 3000);
+  }
+};
+
+/**
+ * Verifica se a letra escolhida pelo usuário existe nas palavras
+ *
+ * @author Guilherme Martin
+ * @author Leonardo Veiga
  */
 const wordChoose = () => {
   answer.forEach(element => {
@@ -182,39 +219,37 @@ const wordChoose = () => {
       ...wordStatus,
       element
         .split("")
-        .map(letter => (guessed.indexOf(letter) > 0 ? letter : " _ "))
+        .map(letter => (guessed.indexOf(letter) >= 0 ? letter : " _ "))
         .join("")
     ];
   });
 
   const wordAnswerArray = wordStatus.slice(wordStatus.length - 3).slice(",");
 
-  document.getElementById("wordSpotlight").innerHTML =
-    `
+  if (wordAnswerArray.length > 0) {
+    document.getElementById("wordSpotlight").innerHTML =
+      `
     <p
       class="word"
     >
       ` +
-    wordAnswerArray[0] +
-    `
+      wordAnswerArray[0] +
+      `
     </p>
     <p
     class="word"
     >
       ` +
-    wordAnswerArray[1] +
-    `
+      wordAnswerArray[1] +
+      `
     </p>
     <p
     class="word"
     >
       ` +
-    wordAnswerArray[2] +
-    `
+      wordAnswerArray[2] +
+      `
     </p>
   `;
-};
-
-module.exports = {
-  initGame
+  }
 };

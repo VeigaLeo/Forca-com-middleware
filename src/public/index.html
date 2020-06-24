@@ -11,33 +11,55 @@
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
     />
     <link rel="stylesheet" href="../public/assets/styles.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+      rel="stylesheet"
+      media="all"
+    />
+
     <title>Forca com Middleware</title>
   </head>
-  <body onload="initGame()">
+  <body>
     <div class="container">
       <h1 class="text-center">Forca com Middleware</h1>
+      <div class="text-right">
+        <p id="playerName"></p>
+      </div>
       <div class="text-center">
         <p id="instructions">Para jogar, clique em alguma letra disponível.</p>
         <div id="wordSpotlight" class="wordStatus"></div>
-        <div id="keyboard" class="buttons"></div>
+        <div id="keyboard" style="margin-top: 30px; margin-bottom: 30px;"></div>
         <div id="playerWon" class="playerWon"></div>
       </div>
 
+      <div class="text-center">
+        <span class="text-center">Prêmio Atual: </span
+        ><span id="currentAward"></span>
+      </div>
+      <br />
       <div class="text-center" id="player">
         <script>
           handlePlayerTurn();
         </script>
       </div>
+      <br />
     </div>
     <footer>
-      <div id="playerScore" style="text-align: center;">
-        <br /><span id="numberOnePlayerScore">Posição 1 - Jogador: 1 - 0</span
-        ><br />
-        <span id="numberTwoPlayerScore">Posição 2 - Jogador: 2 - 0</span><br />
-        <span id="numberThreePlayerScore">Posição 3 - Jogador: 3 - 0</span>
+      <div id="placarJogadores" style="text-align: center;">
+        <span>Placar Atual: </span><br /><br />
+        <div id="anchorJogadores"></div>
       </div>
     </footer>
 
+    <script>
+      window.$ = window.jQuery = require("jquery");
+    </script>
+    <script>
+      window.toastr = require("toastr");
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <script src="../../node_modules/socket.io-client/dist/socket.io.js"></script>
+    <script src="../controller/socket.js"></script>
     <script src="../controller/hangman.js"></script>
   </body>
 </html>
