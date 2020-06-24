@@ -10,16 +10,14 @@
 # Sistema
 Após executar todos os comandos acima. 
 Aparecerá a seguinte tela: 
+![alt text](https://github.com/VeigaLeo/Forca-com-middleware/blob/master/img/screen1.png)
 
 Nessa tela, é onde ocorre o registro do jogador, onde o usuário pode colocar seu nome como identificador
 
 Após inserir o nome, o sistema irá registrar esse jogador e então permitir que se junte aos outros jogadores:
+![alt text](https://github.com/VeigaLeo/Forca-com-middleware/blob/master/img/screen2.png)
 
-
-
-
-
-
+E então o jogador poderá escolher uma respectiva letra para adivinhar.
 
 # Estrutura
 O projeto possui quatro etapas, onde em cada etapa foram sendo implementados novas capacidades e funcionalidades relacionadas à sistemas distribuidos.
