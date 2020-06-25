@@ -30,10 +30,10 @@ O projeto possui quatro etapas, onde em cada etapa foram sendo implementados nov
    Para executar esta etapa do projeto será necessário rodar o servidor junto com a aplicação client. Então `git checkout v2.0`, em seguida `npm install` para instalar as dependências. Na pasta root do projeto, execute `node main.js`. Após isso abra outra aba do terminal e execute `npm start`.
   ## Etapa 3
   Versão do jogo baseado em RPC, em tempo real, ainda utilizando `Socket.io`, jogadores pontuam, o jogo ainda não é "infinito".
-  Para executar esta etapa do projeto execute `git checkout v3.0`, `npm install` para instalar as dependências e o servidor `node server.js` na pasta root do projeto.
+  Para executar esta etapa do projeto execute `git checkout v3.0`, `npm install` para instalar as dependências e o servidor `node server.js` na pasta root do projeto e por fim `npm start`.
   ## Etapa 4 (Final)
   Versão do jogo em tempo real, capaz de suportar quantos jogadores quiser. Jogo infinito, onde cada vez que as três palavras são reveladas, o jogo sorteia novas três palavras, mas os jogadores continuam pontuando de onde estavam. Caso um jogador deseja se desconectar ele será removido da fila, e caso ele quiser voltar, a sua quantidade de pontos deverá voltar ao que era antes.
-  Para executar esta etapa do projeto execute `git checkout v4.0`, `npm install` para instalar as dependências e o servidor `node server.js` na pasta root do projeto.
+  Para executar esta etapa do projeto execute `git checkout v4.0`, `npm install` para instalar as dependências e o servidor `node server.js` na pasta root do projeto e por fim `npm start`.
   
 # Tecnologias
 - NodeJs
