@@ -86,8 +86,6 @@ socket.on("getallplayers", function (playersServer) {
  * @author Leonardo Veiga
  */
 socket.on("nextplayer", function (currentPlayerId) {
-  console.log("currentPlayerId", currentPlayerId);
-
   currentPlayerIdQueue = currentPlayerId;
   handlePlayerTurn();
 });

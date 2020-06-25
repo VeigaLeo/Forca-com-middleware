@@ -40,6 +40,7 @@ io.on("connection", socket => {
       return e.socketId != player.socketId;
     });
     totalPlayersPlaying -= 1;
+    io.emit("nextplayer", players[currentPlayer].playerId);
   });
 
   /**
@@ -130,8 +131,6 @@ io.on("connection", socket => {
    * @author Leonardo Veiga
    */
   socket.on("nextplayer", player => {
-    console.log("players[currentPlayer + 1]", players[currentPlayer]);
-
     if (
       players[currentPlayer + 1] !== null &&
       players[currentPlayer + 1] !== undefined
