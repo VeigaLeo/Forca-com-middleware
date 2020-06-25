@@ -4,8 +4,9 @@
 # Instalação
 * Clone o projeto em sua máquina;
 * execute `npm install` para instalar todas as dependências;
-* execute `npm start` para rodar o projeto client em sua versão final;
 * execute `node server.js` para rodar o servidor em sua versão final;
+* execute `npm start` para rodar o projeto client em sua versão final;
+
 
 # Sistema
 Após executar todos os comandos acima. 
