@@ -21,6 +21,8 @@ let currentAward = Math.floor(Math.random() * 2000);
 // Letras já escolhidas da rodada
 let chosenLetters = [];
 
+let inactivePlayers = [];
+
 /**
  * Método principal para manipular conexões do socket.io
  *
@@ -36,10 +38,13 @@ io.on("connection", socket => {
    */
   socket.on("disconnect", () => {
     const player = players.find(e => e.socketId === socket.id);
+    inactivePlayers.push(player);
+
     players = players.filter(e => {
       return e.socketId != player.socketId;
     });
     totalPlayersPlaying -= 1;
+
     io.emit("nextplayer", players[currentPlayer].playerId);
   });
 
@@ -75,6 +80,10 @@ io.on("connection", socket => {
       element => element.uniqueId === newPlayer.uniqueId
     );
 
+    const inactiveFound = inactivePlayers.find(
+      element => element.uniqueId === newPlayer.uniqueId
+    );
+
     if (players.length === 0) {
       chosenLetters = [];
       currentAward = Math.floor(Math.random() * 2000);
@@ -84,7 +93,7 @@ io.on("connection", socket => {
       }
     }
 
-    if (!found) {
+    if (!found && !inactiveFound) {
       let player = {
         playerId: totalPlayersPlaying,
         socketId: socket.id,
@@ -97,7 +106,13 @@ io.on("connection", socket => {
 
       io.to(socket.id).emit("successregisternewplayer", player);
     } else {
-      io.to(socket.id).emit("alreadyregisterplayer", found);
+      inactivePlayers = inactivePlayers.filter(e => {
+        return e.uniqueId != newPlayer.uniqueId;
+      });
+
+      players.push(inactiveFound);
+
+      io.to(socket.id).emit("alreadyregisterplayer", inactiveFound);
     }
 
     io.emit("getcurrentwords", currentWords);

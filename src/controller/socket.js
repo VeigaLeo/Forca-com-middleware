@@ -22,8 +22,6 @@ socket.on("updatescoreboard", function (playersScore) {
       "</span><br>";
   }
 
-  players = playersScore;
-
   handlePlayerTurn();
 
   $("#anchorJogadores").html(htmlPlacar);
